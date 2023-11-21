@@ -1,3 +1,4 @@
 *.o
 pugi_xml_parser
 .DS_Store
+/.vscode
