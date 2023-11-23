@@ -3,7 +3,9 @@
 int main()
 {
     // seeding random number generator
-    srand(time(0));
+
+    // uncomment below line for prod
+    //srand(time(0));
 
     int num_cities = 14;
 
@@ -43,7 +45,11 @@ int main()
     int num_ants = 5;
     ant_tabu_map_t mp = generate_ant_tabu_tables(num_ants, num_cities);
 
-    std::cout << mp[3][1] << std::endl;
+    // testing transition probability
+    float alpha = 0.9;
+    float beta = 0.5;
+    float res = transition_rule(D, pheremone_matrix, mp[0], num_cities, 2, 3, alpha, beta);
+    std::cout << "Res: " << res << std::endl;
 
     return 0;
 }
