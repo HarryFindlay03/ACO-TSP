@@ -3,7 +3,6 @@ CC = g++
 generate_folder_structure:
 	if [ ! -d build ]; then mkdir -p build; fi; if [ ! -d bin ]; then mkdir -p bin; fi
 
-
 aco_driver.o:
 	g++ -c src/aco_driver.cpp -o build/aco_driver.o
 
