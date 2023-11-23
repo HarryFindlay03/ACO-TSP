@@ -24,14 +24,49 @@ float** get_distance_matrix(char* filename, int num_cities)
             if(node_count == next_node_count) next_node_count++;
 
             // converting to a double
-            double d;
+            float d;
             const char* s = cost.attribute("cost").value();
-            sscanf(s, "%lf", &d);
+            sscanf(s, "%f", &d);
             distance_matrix[node_count][next_node_count] = d;
         }
     }
 
     return distance_matrix;
+}
+
+float** generate_pheremone_matrix(int num_cities)
+{
+    // pheremone matrix will be one row longer than required to store the starting pheremones
+    // a psuedo-start node is represented to allow for a actual start node in the graph to be selected.
+
+    // ensure prng has been seeded well prior to calling this function
+    float** pheremone_matrix = new float*[num_cities];
+
+    int i, j;
+    for(i = 0; i < num_cities; i++)
+    {
+        pheremone_matrix[i] = new float[num_cities];
+        for(j = 0; j < num_cities; j++)
+        {
+            if(i == j)
+            {
+                pheremone_matrix[i][j] = 0;
+                continue;
+            }
+
+            float random_number = (float)rand() / RAND_MAX;
+            pheremone_matrix[i][j] = random_number;
+        }
+    }
+
+    // pheremone levels for pseudostart node
+    pheremone_matrix[i] = new float[num_cities];
+    for(j = 0; j < num_cities; j++)
+    {
+        pheremone_matrix[i][j] = (float)rand() / RAND_MAX;
+    }
+
+    return pheremone_matrix;
 }
 
 
