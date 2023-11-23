@@ -4,3 +4,4 @@ pugi_xml_parser
 /.vscode
 /build
 /bin
+/ext/*/lib
