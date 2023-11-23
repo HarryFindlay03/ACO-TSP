@@ -13,7 +13,7 @@ int main()
     int i, j;
 
     // generating distance matrix 
-    float** D = get_distance_matrix(filename, num_cities);
+    float** D = generate_distance_matrix(filename, num_cities);
     for (i = 0; i < num_cities; i++)
     {
         for (j = 0; j < num_cities; j++)
@@ -36,6 +36,14 @@ int main()
         }
         std::cout << std::endl;
     }
+
+    // getting ant tabu table
+    std::cout << std::endl << std::endl;
+
+    int num_ants = 5;
+    ant_tabu_map_t mp = generate_ant_tabu_tables(num_ants, num_cities);
+
+    std::cout << mp[3][1] << std::endl;
 
     return 0;
 }

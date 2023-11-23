@@ -1,6 +1,6 @@
 #include "../include/aco_helper_functions.hpp"
 
-float** get_distance_matrix(char* filename, int num_cities)
+float** generate_distance_matrix(char* filename, int num_cities)
 {
     pugi::xml_document doc;
     // need error handling here
@@ -67,6 +67,19 @@ float** generate_pheremone_matrix(int num_cities)
     }
 
     return pheremone_matrix;
+}
+
+ant_tabu_map_t generate_ant_tabu_tables(int num_ants, int num_cities)
+{
+    ant_tabu_map_t mp;
+    int i, j;
+    for(i = 0; i < num_ants; i++) {
+        mp[i] = new int[num_cities];
+        for(j = 0; j < num_cities; j++)
+            mp[i][j] = 0;
+    }
+
+    return mp;
 }
 
 
