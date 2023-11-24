@@ -1,11 +1,13 @@
 #include "../include/aco_driver.hpp"
 
+// TODO: Turn common parameters passed into a struct
+
 int main()
 {
     // seeding random number generator
 
     // uncomment below line for prod
-    //srand(time(0));
+    // srand(time(0));
 
     int num_cities = 14;
 
@@ -48,8 +50,13 @@ int main()
     // testing transition probability
     float alpha = 0.9;
     float beta = 0.5;
-    float res = transition_rule(D, pheremone_matrix, mp[0], num_cities, 2, 3, alpha, beta);
-    std::cout << "Res: " << res << std::endl;
+    // float res = transition_rule(D, pheremone_matrix, mp[0], num_cities, 2, 3, alpha, beta);
+    // std::cout << "Res: " << res << std::endl;
+
+    // testing get_next_city
+    int start_city = 1;
+    int next_city = get_next_city(D, pheremone_matrix, mp[0], num_ants, num_cities, start_city, alpha, beta);
+    std::cout << "Next city test: " << next_city << std::endl;
 
     return 0;
 }
