@@ -60,11 +60,11 @@ float** generate_pheremone_matrix(int num_cities)
     }
 
     // pheremone levels for pseudostart node
-    pheremone_matrix[i] = new float[num_cities];
-    for(j = 0; j < num_cities; j++)
-    {
-        pheremone_matrix[i][j] = (float)rand() / RAND_MAX;
-    }
+    // pheremone_matrix[i] = new float[num_cities];
+    // for(j = 0; j < num_cities; j++)
+    // {
+    //     pheremone_matrix[i][j] = (float)rand() / RAND_MAX;
+    // }
 
     return pheremone_matrix;
 }

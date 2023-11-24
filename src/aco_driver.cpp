@@ -29,7 +29,7 @@ int main()
 
     // generating initial random pheremone matrix
     float** pheremone_matrix = generate_pheremone_matrix(num_cities);
-    for (i = 0; i <= num_cities; i++)
+    for (i = 0; i < num_cities; i++)
     {
         for (j = 0; j < num_cities; j++)
         {
