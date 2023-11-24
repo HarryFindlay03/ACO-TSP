@@ -8,16 +8,9 @@ int get_next_city(float** D, float** T, int* ant_tabu_table, int num_ants, int n
     float probs[num_cities];
 
     // generate cumulative probabilites of which city to visit next
+    probs[0] = transition_rule(D, T, ant_tabu_table, num_cities, start_city, 0, alpha, beta);
     for (i = 1; i < num_cities; i++)
-    {
-        if (start_city == i) continue; 
-        if (i == 0)
-        {
-            probs[i] = transition_rule(D, T, ant_tabu_table, num_cities, start_city, i, alpha, beta);
-            continue;
-        }
         probs[i] = probs[i - 1] + transition_rule(D, T, ant_tabu_table, num_cities, start_city, i, alpha, beta);
-    }
 
     // choose which city to visit next
     float spin = (float)rand() / RAND_MAX;
