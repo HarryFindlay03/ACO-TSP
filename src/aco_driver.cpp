@@ -55,8 +55,12 @@ int main()
 
     // testing get_next_city
     int start_city = 1;
-    int next_city = get_next_city(D, pheremone_matrix, mp[0], num_ants, num_cities, start_city, alpha, beta);
-    std::cout << "Next city test: " << next_city << std::endl;
+    int* test_route = generate_ant_route(D, pheremone_matrix, mp[0], num_cities, start_city, alpha, beta);
+
+    for(i = 0; i < num_cities; i++)
+        std::cout << test_route[i] << "\t";
+    
+    std::cout << std::endl;
 
     return 0;
 }
