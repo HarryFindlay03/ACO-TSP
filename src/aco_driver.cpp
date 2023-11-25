@@ -45,7 +45,8 @@ int main()
     std::cout << std::endl << std::endl;
 
     int num_ants = 5;
-    ant_tabu_map_t mp = generate_ant_tabu_tables(num_ants, num_cities);
+    int start_city = 1;
+    ant_tabu_map_t mp = generate_ant_tabu_tables(num_ants, num_cities, start_city);
 
     // testing transition probability
     float alpha = 0.9;
@@ -54,11 +55,18 @@ int main()
     // std::cout << "Res: " << res << std::endl;
 
     // testing get_next_city
-    int start_city = 1;
-    int* test_route = generate_ant_route(D, pheremone_matrix, mp[0], num_cities, start_city, alpha, beta);
 
-    for(i = 0; i < num_cities; i++)
-        std::cout << test_route[i] << "\t";
+    // testing generating ant routes
+    int** ant_routes = generate_all_ant_routes(D, pheremone_matrix, mp, num_ants, num_cities, start_city, alpha, beta);
+
+    std::cout << "TEST ANT ROUTES" << std::endl;
+    for(i = 0; i < num_ants; i++)
+    {
+        std::cout << "ANT " << i << std::endl;
+        for(j = 0; j < num_cities; j++)
+            std::cout << ant_routes[i][j] << " ";
+        std::cout << std::endl;
+    }
     
     std::cout << std::endl;
 

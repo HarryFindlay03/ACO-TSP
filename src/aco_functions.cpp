@@ -2,6 +2,21 @@
 
 float city_pair_distance_heuristic(float** D, int x, int y) { return 1 / D[x][y]; }
 
+int** generate_all_ant_routes(float** D, float** T, ant_tabu_map_t ant_map, int num_ants, int num_cities, int start_city, float alpha, float beta)
+{
+    int i, j;
+    int** ant_routes = new int*[num_ants];
+     
+    // for each ant
+    for(i = 0; i < num_ants; i++)
+    {
+        ant_routes[i] = new int[num_cities];
+        ant_routes[i] = generate_ant_route(D, T, ant_map[i], num_cities, start_city, alpha, beta);
+    }
+
+    return ant_routes;
+}
+
 int* generate_ant_route(float** D, float** T, int* ant_tabu_table, int num_cities, int start_city, float alpha, float beta)
 {
     int* ant_route = new int[num_cities];
@@ -77,6 +92,3 @@ float transition_rule(float** D, float** T, int* ant_tabu_table, int num_cities,
 
     return (nom / dom);
 }
-
-
-
