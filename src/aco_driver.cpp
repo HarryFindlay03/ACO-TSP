@@ -1,26 +1,27 @@
 #include "../include/aco_driver.hpp"
 
 // TODO
-// TODO - adding num ants and num cities into ant data structure
+// TODO - Changing map data structure to something better
+// TODO - Getting it to start from points that have a pheremone on them
 
 int main()
 {
     // seeding random number generator
 
     // uncomment below line for prod
-    srand(time(0));
+    // srand(time(0));
 
     // PARAMETERS
     int num_ants = 10;
-    int num_cities = 14;
+    int num_cities = 58;
     int start_city = 1;
     float alpha = 0.9;
     float beta = 0.5;
     float Q = 5;
     float evaporation_rate = 0.3;
 
-    char* filename = new char[sizeof("data/burma14.xml")];
-    strcpy(filename, "data/burma14.xml");
+    char* filename = new char[sizeof("data/brazil58.xml")];
+    strcpy(filename, "data/brazil58.xml");
 
     int i, j;
 
@@ -55,7 +56,7 @@ int main()
 
     // testing generating ant routes
     int x;
-    for(x = 0; x < 10000; x++)
+    for(x = 0; x < 100; x++)
     {
         generate_all_ant_routes(ant_data, start_city, alpha, beta);
         prepare_new_run(ant_data, start_city, Q, evaporation_rate);

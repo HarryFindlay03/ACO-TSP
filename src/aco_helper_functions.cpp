@@ -6,7 +6,7 @@ ANT_DATA* generate_ant_data(char* filename, int num_ants, int num_cities, int st
     ant_data->D = generate_distance_matrix(filename, num_cities);
     ant_data->T = generate_pheremone_matrix(num_cities);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
-    ant_data->ant_routes = generate_ant_routes(num_ants, num_cities);
+    ant_data->ant_routes = generate_initial_ant_routes(num_ants, num_cities);
     ant_data->num_ants = new int(num_ants);
     ant_data->num_cities = new int(num_cities);
 
@@ -82,9 +82,9 @@ float** generate_pheremone_matrix(int num_cities)
     return pheremone_matrix;
 }
 
-ant_tabu_map_t generate_ant_tabu_tables(int num_ants, int num_cities, int start_city)
+int** generate_ant_tabu_tables(int num_ants, int num_cities, int start_city)
 {
-    ant_tabu_map_t mp;
+    int** mp = new int*[num_ants];
     int i, j;
     for(i = 0; i < num_ants; i++) {
         mp[i] = new int[num_cities];
@@ -102,7 +102,17 @@ ant_tabu_map_t generate_ant_tabu_tables(int num_ants, int num_cities, int start_
     return mp;
 }
 
-int** generate_ant_routes(int num_ants, int num_cities)
+void reset_ant_tabu_tables(int** ant_tabu_tables, int num_ants, int num_cities, int start_city)
+{
+    int i, j;
+    for(i = 0; i < num_ants; i++)
+        for(j = 0; j < num_cities; j++)
+            (start_city == j) ? ant_tabu_tables[i][j] = 1 : ant_tabu_tables[i][j] = 0;
+
+    return;
+}
+
+int** generate_initial_ant_routes(int num_ants, int num_cities)
 {
     int** ant_routes = new int*[num_ants];
     int i;

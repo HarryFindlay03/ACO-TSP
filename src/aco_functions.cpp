@@ -160,7 +160,7 @@ void prepare_new_run(ANT_DATA* ant_data, int start_city, float Q, float evaporat
 
     lay_pheremones(ant_data, Q);
     evaporate_pheremones(ant_data, evaporation_rate);
-    ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
+    reset_ant_tabu_tables(ant_data->ant_map, num_ants, num_cities, start_city);
 
     return;
 }
