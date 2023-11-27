@@ -12,6 +12,8 @@ int main()
     int num_ants = 5;
     int num_cities = 14;
     int start_city = 1;
+    float alpha = 0.9;
+    float beta = 0.5;
 
     char* filename = new char[sizeof("data/burma14.xml")];
     strcpy(filename, "data/burma14.xml");
@@ -45,21 +47,11 @@ int main()
         std::cout << std::endl;
     }
 
-    // getting ant tabu table
     std::cout << std::endl << std::endl;
 
-    ant_tabu_map_t mp = ant_data->ant_map;
-
-    // testing transition probability
-    float alpha = 0.9;
-    float beta = 0.5;
-    // float res = transition_rule(D, pheremone_matrix, mp[0], num_cities, 2, 3, alpha, beta);
-    // std::cout << "Res: " << res << std::endl;
-
-    // testing get_next_city
 
     // testing generating ant routes
-    int** ant_routes = generate_all_ant_routes(D, pheremone_matrix, mp, num_ants, num_cities, start_city, alpha, beta);
+    int** ant_routes = generate_all_ant_routes(ant_data, num_ants, num_cities, start_city, alpha, beta);
 
     std::cout << "TEST ANT ROUTES" << std::endl;
     for(i = 0; i < num_ants; i++)

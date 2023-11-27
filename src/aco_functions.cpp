@@ -5,7 +5,7 @@
 
 float city_pair_distance_heuristic(float** D, int x, int y) { return 1 / D[x][y]; }
 
-int** generate_all_ant_routes(float** D, float** T, ant_tabu_map_t ant_map, int num_ants, int num_cities, int start_city, float alpha, float beta)
+int** generate_all_ant_routes(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float alpha, float beta)
 {
     int i, j;
     int** ant_routes = new int*[num_ants];
@@ -14,13 +14,13 @@ int** generate_all_ant_routes(float** D, float** T, ant_tabu_map_t ant_map, int 
     for(i = 0; i < num_ants; i++)
     {
         ant_routes[i] = new int[num_cities];
-        ant_routes[i] = generate_ant_route(D, T, ant_map[i], num_cities, start_city, alpha, beta);
+        ant_routes[i] = generate_ant_route(ant_data, i, num_cities, start_city, alpha, beta);
     }
 
     return ant_routes;
 }
 
-int* generate_ant_route(float** D, float** T, int* ant_tabu_table, int num_cities, int start_city, float alpha, float beta)
+int* generate_ant_route(ANT_DATA* ant_data, int ant_num, int num_cities, int start_city, float alpha, float beta)
 {
     int* ant_route = new int[num_cities];
     ant_route[0] = start_city;
@@ -28,22 +28,22 @@ int* generate_ant_route(float** D, float** T, int* ant_tabu_table, int num_citie
     int i = 1;
     while(i < num_cities)
     {
-        int next = get_next_city(D, T, ant_tabu_table, num_cities, ant_route[i-1], alpha, beta);
+        int next = get_next_city(ant_data, ant_num, num_cities, ant_route[i-1], alpha, beta);
         ant_route[i] = next;
-        ant_tabu_table[next] = 1;
+        (ant_data->ant_map)[ant_num][next] = 1;
         i++;
     }
 
     return ant_route;
 }
 
-int get_next_city(float** D, float** T, int* ant_tabu_table, int num_cities, int start_city, float alpha, float beta)
+int get_next_city(ANT_DATA* ant_data, int ant_num, int num_cities, int start_city, float alpha, float beta)
 {
     int i;
     float probs[num_cities];
 
     for(i = 0; i < num_cities; i++)
-        probs[i] = transition_rule(D, T, ant_tabu_table, num_cities, start_city, i, alpha, beta);
+        probs[i] = transition_rule(ant_data, ant_num, num_cities, start_city, i, alpha, beta);
 
     int pos = 0;
     int remaining_cities[num_cities]; // only need ever be as big as num_cities
@@ -69,9 +69,14 @@ int get_next_city(float** D, float** T, int* ant_tabu_table, int num_cities, int
     return remaining_cities[i];
 }
 
-float transition_rule(float** D, float** T, int* ant_tabu_table, int num_cities, int city_i, int city_j, float alpha, float beta)
+float transition_rule(ANT_DATA* ant_data, int ant_num, int num_cities, int city_i, int city_j, float alpha, float beta)
 {
     if(city_i == city_j) return 0;
+
+    float** D = ant_data->D;
+    float** T = ant_data->T;
+    int* ant_tabu_table = (ant_data->ant_map)[ant_num];
+
     if(ant_tabu_table[city_j]) return 0;
 
     float nom, dom;
