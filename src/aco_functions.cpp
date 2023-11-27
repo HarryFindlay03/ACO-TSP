@@ -1,5 +1,8 @@
 #include "../include/aco_functions.hpp"
 
+// TODO
+// Pheremone update
+
 float city_pair_distance_heuristic(float** D, int x, int y) { return 1 / D[x][y]; }
 
 int** generate_all_ant_routes(float** D, float** T, ant_tabu_map_t ant_map, int num_ants, int num_cities, int start_city, float alpha, float beta)
@@ -42,21 +45,18 @@ int get_next_city(float** D, float** T, int* ant_tabu_table, int num_cities, int
     for(i = 0; i < num_cities; i++)
         probs[i] = transition_rule(D, T, ant_tabu_table, num_cities, start_city, i, alpha, beta);
 
-    // remaining cities to work out cumulative prob and return correct city
-    std::vector<int> remaining_cities;
-    for(i = 0; i < num_cities; i++)
-        if(probs[i])
-            remaining_cities.push_back(i);
-
     int pos = 0;
-    float cumulative_probs[remaining_cities.size()];
+    int remaining_cities[num_cities]; // only need ever be as big as num_cities
+    float cumulative_probs[num_cities];
     float res = 0;
     for (i = 0; i < num_cities; i++)
     {
         if(probs[i])
         {
+            remaining_cities[pos] = i;
             res += probs[i];
-            cumulative_probs[pos++] = res;
+            cumulative_probs[pos] = res;
+            pos++;
         }
     }
 
