@@ -134,10 +134,9 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
     int num_cities = *(ant_data->num_cities);
 
     int i, j;
+
     // computing the quality heuristic
-    float route_quality_heuristic = 0;
-    for(i = 0; i < num_ants; i++)
-        route_quality_heuristic += (1 / tour_length(ant_data->D, (ant_data->ant_routes)[i], num_cities));
+    float quality_heuristic = tour_quality_heuristic(ant_data->D, ant_data->ant_routes, num_ants, num_cities);
 
     // evaporate the pheremones
     for(i = 0; i < num_cities; i++)
@@ -145,11 +144,22 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
         for(j = 0; j < num_cities; j++)
         {
             float curr = (ant_data->T)[i][j];
-            (ant_data->T)[i][j] = ((1 - evaporation_rate) * curr) + route_quality_heuristic;
+            (ant_data->T)[i][j] = ((1 - evaporation_rate) * curr) + quality_heuristic;
         }
     }
 
     return;
+}
+
+float tour_quality_heuristic(float** D, int** ant_routes, int num_ants, int num_cities)
+{
+    float res = 0;
+
+    int i;
+    for(i = 0; i < num_ants; i++)
+        res += (1 / tour_length(D, ant_routes[i], num_cities));
+
+    return res;
 }
 
 

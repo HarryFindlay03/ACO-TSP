@@ -11,4 +11,5 @@ int get_next_city(ANT_DATA*, int, int, float, float);
 float transition_rule(ANT_DATA*, int, int, int, float, float);
 void lay_pheremones(ANT_DATA*, float);
 void evaporate_pheremones(ANT_DATA*, float);
+float tour_quality_heuristic(float**, int**, int, int);
 void prepare_new_run(ANT_DATA*, int, float, float);
