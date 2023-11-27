@@ -3,6 +3,17 @@
 // TODO
 // Pheremone update
 
+float tour_length(float** D, int* tour, int num_cities)
+{
+    float res = 0;
+
+    int i;
+    for(i = 0; i < num_cities; i++)
+        res += D[tour[i]][tour[i+1]];
+
+    return res;
+}
+
 float city_pair_distance_heuristic(float** D, int x, int y) { return 1 / D[x][y]; }
 
 int** generate_all_ant_routes(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float alpha, float beta)
@@ -12,10 +23,7 @@ int** generate_all_ant_routes(ANT_DATA* ant_data, int num_ants, int num_cities, 
      
     // for each ant
     for(i = 0; i < num_ants; i++)
-    {
-        ant_routes[i] = new int[num_cities];
         ant_routes[i] = generate_ant_route(ant_data, i, num_cities, start_city, alpha, beta);
-    }
 
     return ant_routes;
 }
@@ -34,6 +42,7 @@ int* generate_ant_route(ANT_DATA* ant_data, int ant_num, int num_cities, int sta
         i++;
     }
 
+    ant_route[i] = ant_route[0];
     return ant_route;
 }
 
@@ -96,3 +105,8 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int num_cities, int city_
 
     return (nom / dom);
 }
+
+// void lay_pheremones(ANT_DATA*, int num_ants, float Q)
+// {
+
+// }

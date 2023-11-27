@@ -57,9 +57,9 @@ int main()
     for(i = 0; i < num_ants; i++)
     {
         std::cout << "ANT " << i << std::endl;
-        for(j = 0; j < num_cities; j++)
+        for(j = 0; j <= num_cities; j++)
             std::cout << ant_routes[i][j] << " ";
-        std::cout << std::endl;
+        std::cout << std::fixed << "\t Tour Length: " << tour_length(ant_data->D, ant_routes[i], num_cities) << std::endl;
     }
     
     std::cout << std::endl;
