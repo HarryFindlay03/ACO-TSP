@@ -119,8 +119,33 @@ void lay_pheremones(ANT_DATA* ant_data, int num_ants, int num_cities, float Q)
     }
 }
 
-void prepare_new_run(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float Q)
+void evaporate_pheremones(ANT_DATA* ant_data, int num_ants, int num_cities, float evaporation_rate)
+{
+    int i, j;
+    // computing the quality heuristic
+    float route_quality_heuristic = 0;
+    for(i = 0; i < num_ants; i++)
+        route_quality_heuristic += (1 / tour_length(ant_data->D, (ant_data->ant_routes)[i], num_cities));
+
+    // evaporate the pheremones
+    for(i = 0; i < num_cities; i++)
+    {
+        for(j = 0; j < num_cities; j++)
+        {
+            float curr = (ant_data->T)[i][j];
+            (ant_data->T)[i][j] = ((1 - evaporation_rate) * curr) + route_quality_heuristic;
+        }
+    }
+
+    return;
+}
+
+
+void prepare_new_run(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float Q, float evaporation_rate)
 {
     lay_pheremones(ant_data, num_ants, num_cities, Q);
+    evaporate_pheremones(ant_data, num_ants, num_cities, evaporation_rate);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
+
+    return;
 }

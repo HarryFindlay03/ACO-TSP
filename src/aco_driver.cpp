@@ -1,7 +1,7 @@
 #include "../include/aco_driver.hpp"
 
 // TODO
-// TODO - Clearing tabu tables after each run and ant routes (maybe just tabu tables)
+// TODO - adding num ants and num cities into ant data structure
 
 int main()
 {
@@ -17,6 +17,7 @@ int main()
     float alpha = 0.9;
     float beta = 0.5;
     float Q = 2;
+    float evaporation_rate = 0.2;
 
     char* filename = new char[sizeof("data/burma14.xml")];
     strcpy(filename, "data/burma14.xml");
@@ -54,7 +55,7 @@ int main()
 
     // testing generating ant routes
     int x;
-    for(x = 0; x < 5; x++)
+    for(x = 0; x < 10000; x++)
     {
         generate_all_ant_routes(ant_data, num_ants, num_cities, start_city, alpha, beta);
 
@@ -69,7 +70,7 @@ int main()
             std::cout << "\t Tour Length: " << tour_length(ant_data->D, ant_route, num_cities) << std::endl;
         }
 
-        prepare_new_run(ant_data, num_ants, num_cities, start_city, Q);
+        prepare_new_run(ant_data, num_ants, num_cities, start_city, Q, evaporation_rate);
 
         std::cout << std::endl << std::endl;
     }
