@@ -59,9 +59,22 @@ int main()
         std::cout << "ANT " << i << std::endl;
         for(j = 0; j <= num_cities; j++)
             std::cout << ant_routes[i][j] << " ";
-        std::cout << std::fixed << "\t Tour Length: " << tour_length(ant_data->D, ant_routes[i], num_cities) << std::endl;
+        std::cout << "\t Tour Length: " << tour_length(ant_data->D, ant_routes[i], num_cities) << std::endl;
     }
     
+    std::cout << std::endl;
+
+    // testing pheremone updates
+    float Q = 2;
+    lay_pheremones(ant_data, ant_routes, num_ants, num_cities, 2);
+
+    for(i = 0; i < num_cities; i++)
+    {
+        for(j = 0; j < num_cities; j++)
+            std::cout << (ant_data->T)[i][j] << "\t";
+        std::cout << std::endl;
+    }
+
     std::cout << std::endl;
 
     return 0;

@@ -106,7 +106,15 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int num_cities, int city_
     return (nom / dom);
 }
 
-// void lay_pheremones(ANT_DATA*, int num_ants, float Q)
-// {
+void lay_pheremones(ANT_DATA* ant_data, int** ant_routes, int num_ants, int num_cities, float Q)
+{
+    int i, j;
+    for(i = 0; i < num_ants; i++)
+    {
+        int* ant_route = ant_routes[i];
+        float route_length = tour_length(ant_data->D, ant_route, num_cities);
 
-// }
+        for(j = 0; j < num_cities; j++)
+            (ant_data->T)[ant_route[j]][ant_route[j+1]] += (Q / route_length);
+    }
+}
