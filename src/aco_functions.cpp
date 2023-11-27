@@ -118,3 +118,9 @@ void lay_pheremones(ANT_DATA* ant_data, int num_ants, int num_cities, float Q)
             (ant_data->T)[ant_route[j]][ant_route[j+1]] += (Q / route_length);
     }
 }
+
+void prepare_new_run(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float Q)
+{
+    lay_pheremones(ant_data, num_ants, num_cities, Q);
+    ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
+}

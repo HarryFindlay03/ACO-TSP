@@ -109,6 +109,3 @@ int** generate_ant_routes(int num_ants, int num_cities)
 
     return ant_routes;
 }
-
-
-

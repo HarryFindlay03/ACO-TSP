@@ -10,3 +10,4 @@ void generate_ant_route(ANT_DATA*, int, int, int, float, float);
 int get_next_city(ANT_DATA*, int, int, int, float, float);
 float transition_rule(ANT_DATA*, int, int, int, int, float, float);
 void lay_pheremones(ANT_DATA*, int, int, float);
+void prepare_new_run(ANT_DATA*, int, int, int, float);

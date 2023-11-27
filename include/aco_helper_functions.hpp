@@ -1,9 +1,11 @@
 #ifndef ACO_HELPER_FUNCTIONS_H
+
 #define ACO_HELPER_FUNCTIONS_H
 
 #include <iostream>
 #include <map>
 #include <cstdlib>
+
 #include "../ext/pugixml/pugixml.hpp"
 
 typedef std::map<int, int*> ant_tabu_map_t;
