@@ -1,6 +1,7 @@
 #include "../include/aco_driver.hpp"
 
-// TODO: Turn common parameters passed into a struct
+// TODO
+// TODO - Clearing tabu tables after each run and ant routes (maybe just tabu tables)
 
 int main()
 {
@@ -51,22 +52,24 @@ int main()
 
 
     // testing generating ant routes
-    int** ant_routes = generate_all_ant_routes(ant_data, num_ants, num_cities, start_city, alpha, beta);
+    generate_all_ant_routes(ant_data, num_ants, num_cities, start_city, alpha, beta);
 
     std::cout << "TEST ANT ROUTES" << std::endl;
+    std::cout << std::fixed;
     for(i = 0; i < num_ants; i++)
     {
+        int* ant_route = (ant_data->ant_routes)[i];
         std::cout << "ANT " << i << std::endl;
         for(j = 0; j <= num_cities; j++)
-            std::cout << ant_routes[i][j] << " ";
-        std::cout << "\t Tour Length: " << tour_length(ant_data->D, ant_routes[i], num_cities) << std::endl;
+            std::cout << ant_route[j] << " ";
+        std::cout << "\t Tour Length: " << tour_length(ant_data->D, ant_route, num_cities) << std::endl;
     }
     
     std::cout << std::endl;
 
     // testing pheremone updates
     float Q = 2;
-    lay_pheremones(ant_data, ant_routes, num_ants, num_cities, 2);
+    lay_pheremones(ant_data, num_ants, num_cities, 2);
 
     for(i = 0; i < num_cities; i++)
     {

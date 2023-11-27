@@ -16,21 +16,20 @@ float tour_length(float** D, int* tour, int num_cities)
 
 float city_pair_distance_heuristic(float** D, int x, int y) { return 1 / D[x][y]; }
 
-int** generate_all_ant_routes(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float alpha, float beta)
+void generate_all_ant_routes(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float alpha, float beta)
 {
-    int i, j;
-    int** ant_routes = new int*[num_ants];
+    int i;
      
     // for each ant
     for(i = 0; i < num_ants; i++)
-        ant_routes[i] = generate_ant_route(ant_data, i, num_cities, start_city, alpha, beta);
+        generate_ant_route(ant_data, i, num_cities, start_city, alpha, beta);
 
-    return ant_routes;
+    return;
 }
 
-int* generate_ant_route(ANT_DATA* ant_data, int ant_num, int num_cities, int start_city, float alpha, float beta)
+void generate_ant_route(ANT_DATA* ant_data, int ant_num, int num_cities, int start_city, float alpha, float beta)
 {
-    int* ant_route = new int[num_cities];
+    int* ant_route = (ant_data->ant_routes)[ant_num];
     ant_route[0] = start_city;
 
     int i = 1;
@@ -43,7 +42,8 @@ int* generate_ant_route(ANT_DATA* ant_data, int ant_num, int num_cities, int sta
     }
 
     ant_route[i] = ant_route[0];
-    return ant_route;
+
+    return;
 }
 
 int get_next_city(ANT_DATA* ant_data, int ant_num, int num_cities, int start_city, float alpha, float beta)
@@ -106,12 +106,12 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int num_cities, int city_
     return (nom / dom);
 }
 
-void lay_pheremones(ANT_DATA* ant_data, int** ant_routes, int num_ants, int num_cities, float Q)
+void lay_pheremones(ANT_DATA* ant_data, int num_ants, int num_cities, float Q)
 {
     int i, j;
     for(i = 0; i < num_ants; i++)
     {
-        int* ant_route = ant_routes[i];
+        int* ant_route = (ant_data->ant_routes)[i];
         float route_length = tour_length(ant_data->D, ant_route, num_cities);
 
         for(j = 0; j < num_cities; j++)

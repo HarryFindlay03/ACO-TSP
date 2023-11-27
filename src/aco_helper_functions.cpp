@@ -6,6 +6,7 @@ ANT_DATA* generate_ant_data(char* filename, int num_ants, int num_cities, int st
     ant_data->D = generate_distance_matrix(filename, num_cities);
     ant_data->T = generate_pheremone_matrix(num_cities);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
+    ant_data->ant_routes = generate_ant_routes(num_ants, num_cities);
 
     return ant_data;
 }
@@ -97,6 +98,16 @@ ant_tabu_map_t generate_ant_tabu_tables(int num_ants, int num_cities, int start_
     }
 
     return mp;
+}
+
+int** generate_ant_routes(int num_ants, int num_cities)
+{
+    int** ant_routes = new int*[num_ants];
+    int i;
+    for(i = 0; i < num_ants; i++)
+        ant_routes[i] = new int[num_cities];
+
+    return ant_routes;
 }
 
 
