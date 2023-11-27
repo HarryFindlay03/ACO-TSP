@@ -7,6 +7,8 @@ ANT_DATA* generate_ant_data(char* filename, int num_ants, int num_cities, int st
     ant_data->T = generate_pheremone_matrix(num_cities);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
     ant_data->ant_routes = generate_ant_routes(num_ants, num_cities);
+    ant_data->num_ants = new int(num_ants);
+    ant_data->num_cities = new int(num_cities);
 
     return ant_data;
 }

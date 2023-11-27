@@ -8,16 +8,16 @@ int main()
     // seeding random number generator
 
     // uncomment below line for prod
-    // srand(time(0));
+    srand(time(0));
 
     // PARAMETERS
-    int num_ants = 5;
+    int num_ants = 10;
     int num_cities = 14;
     int start_city = 1;
     float alpha = 0.9;
     float beta = 0.5;
-    float Q = 2;
-    float evaporation_rate = 0.2;
+    float Q = 5;
+    float evaporation_rate = 0.3;
 
     char* filename = new char[sizeof("data/burma14.xml")];
     strcpy(filename, "data/burma14.xml");
@@ -57,7 +57,9 @@ int main()
     int x;
     for(x = 0; x < 10000; x++)
     {
-        generate_all_ant_routes(ant_data, num_ants, num_cities, start_city, alpha, beta);
+        generate_all_ant_routes(ant_data, start_city, alpha, beta);
+        prepare_new_run(ant_data, start_city, Q, evaporation_rate);
+    }
 
         std::cout << "TEST ANT ROUTES: " << x << std::endl;
         std::cout << std::fixed;
@@ -69,12 +71,6 @@ int main()
                 std::cout << ant_route[j] << " ";
             std::cout << "\t Tour Length: " << tour_length(ant_data->D, ant_route, num_cities) << std::endl;
         }
-
-        prepare_new_run(ant_data, num_ants, num_cities, start_city, Q, evaporation_rate);
-
-        std::cout << std::endl << std::endl;
-    }
-
 
     return 0;
 }

@@ -15,6 +15,8 @@ typedef struct ant_data_t {
     float** T;
     ant_tabu_map_t ant_map;
     int** ant_routes;
+    int* num_ants;
+    int* num_cities;
 } ANT_DATA;
 
 ANT_DATA* generate_ant_data(char*, int, int, int);

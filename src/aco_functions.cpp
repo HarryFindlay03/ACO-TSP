@@ -16,26 +16,30 @@ float tour_length(float** D, int* tour, int num_cities)
 
 float city_pair_distance_heuristic(float** D, int x, int y) { return 1 / D[x][y]; }
 
-void generate_all_ant_routes(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float alpha, float beta)
+void generate_all_ant_routes(ANT_DATA* ant_data, int start_city, float alpha, float beta)
 {
     int i;
+    int num_ants = *(ant_data->num_ants);
+    int num_cities = *(ant_data->num_cities);
      
     // for each ant
     for(i = 0; i < num_ants; i++)
-        generate_ant_route(ant_data, i, num_cities, start_city, alpha, beta);
+        generate_ant_route(ant_data, i, start_city, alpha, beta);
 
     return;
 }
 
-void generate_ant_route(ANT_DATA* ant_data, int ant_num, int num_cities, int start_city, float alpha, float beta)
+void generate_ant_route(ANT_DATA* ant_data, int ant_num, int start_city, float alpha, float beta)
 {
+    int num_ants = *(ant_data->num_ants);
+    int num_cities = *(ant_data->num_cities); 
     int* ant_route = (ant_data->ant_routes)[ant_num];
     ant_route[0] = start_city;
 
     int i = 1;
     while(i < num_cities)
     {
-        int next = get_next_city(ant_data, ant_num, num_cities, ant_route[i-1], alpha, beta);
+        int next = get_next_city(ant_data, ant_num, ant_route[i-1], alpha, beta);
         ant_route[i] = next;
         (ant_data->ant_map)[ant_num][next] = 1;
         i++;
@@ -46,13 +50,14 @@ void generate_ant_route(ANT_DATA* ant_data, int ant_num, int num_cities, int sta
     return;
 }
 
-int get_next_city(ANT_DATA* ant_data, int ant_num, int num_cities, int start_city, float alpha, float beta)
+int get_next_city(ANT_DATA* ant_data, int ant_num, int start_city, float alpha, float beta)
 {
+    int num_cities = *(ant_data->num_cities);
     int i;
     float probs[num_cities];
 
     for(i = 0; i < num_cities; i++)
-        probs[i] = transition_rule(ant_data, ant_num, num_cities, start_city, i, alpha, beta);
+        probs[i] = transition_rule(ant_data, ant_num, start_city, i, alpha, beta);
 
     int pos = 0;
     int remaining_cities[num_cities]; // only need ever be as big as num_cities
@@ -78,10 +83,11 @@ int get_next_city(ANT_DATA* ant_data, int ant_num, int num_cities, int start_cit
     return remaining_cities[i];
 }
 
-float transition_rule(ANT_DATA* ant_data, int ant_num, int num_cities, int city_i, int city_j, float alpha, float beta)
+float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, float alpha, float beta)
 {
     if(city_i == city_j) return 0;
 
+    int num_cities = *(ant_data->num_cities);
     float** D = ant_data->D;
     float** T = ant_data->T;
     int* ant_tabu_table = (ant_data->ant_map)[ant_num];
@@ -106,8 +112,11 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int num_cities, int city_
     return (nom / dom);
 }
 
-void lay_pheremones(ANT_DATA* ant_data, int num_ants, int num_cities, float Q)
+void lay_pheremones(ANT_DATA* ant_data, float Q)
 {
+    int num_ants = *(ant_data->num_ants);
+    int num_cities = *(ant_data->num_cities);
+
     int i, j;
     for(i = 0; i < num_ants; i++)
     {
@@ -119,8 +128,11 @@ void lay_pheremones(ANT_DATA* ant_data, int num_ants, int num_cities, float Q)
     }
 }
 
-void evaporate_pheremones(ANT_DATA* ant_data, int num_ants, int num_cities, float evaporation_rate)
+void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
 {
+    int num_ants = *(ant_data->num_ants);
+    int num_cities = *(ant_data->num_cities);
+
     int i, j;
     // computing the quality heuristic
     float route_quality_heuristic = 0;
@@ -141,10 +153,13 @@ void evaporate_pheremones(ANT_DATA* ant_data, int num_ants, int num_cities, floa
 }
 
 
-void prepare_new_run(ANT_DATA* ant_data, int num_ants, int num_cities, int start_city, float Q, float evaporation_rate)
+void prepare_new_run(ANT_DATA* ant_data, int start_city, float Q, float evaporation_rate)
 {
-    lay_pheremones(ant_data, num_ants, num_cities, Q);
-    evaporate_pheremones(ant_data, num_ants, num_cities, evaporation_rate);
+    int num_ants = *(ant_data->num_ants);
+    int num_cities = *(ant_data->num_cities);
+
+    lay_pheremones(ant_data, Q);
+    evaporate_pheremones(ant_data, evaporation_rate);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
 
     return;
