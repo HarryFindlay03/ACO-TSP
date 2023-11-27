@@ -90,7 +90,6 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int num_cities, int city_
         // city h is unvisited
         if(!ant_tabu_table[h])
         {
-            if(city_i == h) continue; // skips the pheremone strength and distance between city_i and itself (testing phase this will be taken out later)
             dom += (std::pow(T[city_i][h], alpha) * std::pow(city_pair_distance_heuristic(D, city_i, h), beta));
         }
     }
