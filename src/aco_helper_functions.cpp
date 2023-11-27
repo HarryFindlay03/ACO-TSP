@@ -1,5 +1,15 @@
 #include "../include/aco_helper_functions.hpp"
 
+ANT_DATA* generate_ant_data(char* filename, int num_ants, int num_cities, int start_city)
+{
+    ANT_DATA* ant_data = new ANT_DATA;
+    ant_data->D = generate_distance_matrix(filename, num_cities);
+    ant_data->T = generate_pheremone_matrix(num_cities);
+    ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
+
+    return ant_data;
+}
+
 float** generate_distance_matrix(char* filename, int num_cities)
 {
     pugi::xml_document doc;
