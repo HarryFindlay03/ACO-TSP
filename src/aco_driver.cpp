@@ -1,7 +1,6 @@
 #include "../include/aco_driver.hpp"
 
 // TODO
-// TODO - Changing map data structure to something better
 // TODO - Getting it to start from points that have a pheremone on them
 
 int main()
@@ -13,19 +12,21 @@ int main()
 
     // PARAMETERS
     int num_ants = 10;
-    int num_cities = 58;
     int start_city = 1;
     float alpha = 0.9;
     float beta = 0.5;
     float Q = 5;
     float evaporation_rate = 0.3;
 
-    char* filename = new char[sizeof("data/brazil58.xml")];
-    strcpy(filename, "data/brazil58.xml");
+    char* filename = new char[sizeof("data/burma14.xml")];
+    strcpy(filename, "data/burma14.xml");
 
     int i, j;
 
-    ANT_DATA* ant_data = generate_ant_data(filename, num_ants, num_cities, start_city);
+    ANT_DATA* ant_data = generate_ant_data(filename, num_ants, start_city);
+    int num_cities = *(ant_data->num_cities);
+
+    std::cout << "NUM CITIES " << num_cities << std::endl;
 
     // generating distance matrix 
     float** D = ant_data->D;

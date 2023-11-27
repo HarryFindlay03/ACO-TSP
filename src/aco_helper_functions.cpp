@@ -1,7 +1,9 @@
 #include "../include/aco_helper_functions.hpp"
 
-ANT_DATA* generate_ant_data(char* filename, int num_ants, int num_cities, int start_city)
+ANT_DATA* generate_ant_data(char* filename, int num_ants, int start_city)
 {
+    int num_cities = get_num_cities(filename);
+
     ANT_DATA* ant_data = new ANT_DATA;
     ant_data->D = generate_distance_matrix(filename, num_cities);
     ant_data->T = generate_pheremone_matrix(num_cities);
@@ -42,7 +44,7 @@ float** generate_distance_matrix(char* filename, int num_cities)
             sscanf(s, "%f", &d);
             distance_matrix[node_count][next_node_count] = d;
         }
-    }
+    }    
 
     return distance_matrix;
 }
@@ -120,4 +122,23 @@ int** generate_initial_ant_routes(int num_ants, int num_cities)
         ant_routes[i] = new int[num_cities];
 
     return ant_routes;
+}
+
+int get_num_cities(char* filename)
+{
+    pugi::xml_document doc;
+
+    // need error handling here
+    if(!doc.load_file(filename))
+        std::cout << "There was an error!" << std::endl;
+
+    pugi::xml_node nodes = doc.child("travellingSalesmanProblemInstance").child("graph");
+
+    // counting how many vertexes in the graph there are
+    int node_count = 0;
+    pugi::xml_node node;
+    for(node = nodes.first_child(); node; node = node.next_sibling())
+        node_count++;
+
+    return node_count;
 }
