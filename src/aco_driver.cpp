@@ -9,15 +9,19 @@ int main()
     // uncomment below line for prod
     // srand(time(0));
 
+    int num_ants = 5;
     int num_cities = 14;
+    int start_city = 1;
 
     char* filename = new char[sizeof("data/burma14.xml")];
     strcpy(filename, "data/burma14.xml");
 
     int i, j;
 
+    ANT_DATA* ant_data = generate_ant_data(filename, num_ants, num_cities, start_city);
+
     // generating distance matrix 
-    float** D = generate_distance_matrix(filename, num_cities);
+    float** D = ant_data->D;
     for (i = 0; i < num_cities; i++)
     {
         for (j = 0; j < num_cities; j++)
@@ -30,7 +34,7 @@ int main()
     std::cout << std::endl << std::endl;
 
     // generating initial random pheremone matrix
-    float** pheremone_matrix = generate_pheremone_matrix(num_cities);
+    float** pheremone_matrix = ant_data->T; 
     for (i = 0; i < num_cities; i++)
     {
         for (j = 0; j < num_cities; j++)
@@ -44,9 +48,7 @@ int main()
     // getting ant tabu table
     std::cout << std::endl << std::endl;
 
-    int num_ants = 5;
-    int start_city = 1;
-    ant_tabu_map_t mp = generate_ant_tabu_tables(num_ants, num_cities, start_city);
+    ant_tabu_map_t mp = ant_data->ant_map;
 
     // testing transition probability
     float alpha = 0.9;

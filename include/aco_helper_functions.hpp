@@ -1,3 +1,6 @@
+#ifndef ACO_HELPER_FUNCTIONS_H
+#define ACO_HELPER_FUNCTIONS_H
+
 #include <iostream>
 #include <map>
 #include <cstdlib>
@@ -15,3 +18,5 @@ ANT_DATA* generate_ant_data(char*, int, int, int);
 float** generate_distance_matrix(char*, int);
 float** generate_pheremone_matrix(int);
 ant_tabu_map_t generate_ant_tabu_tables(int, int, int);
+
+#endif
