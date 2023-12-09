@@ -101,7 +101,7 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, f
 
     int num_cities = *(ant_data->num_cities);
     const matrix_t& D = ant_data->D;
-    float** T = ant_data->T;
+    matrix_t& T = ant_data->T;
     int* ant_tabu_table = (ant_data->ant_map)[ant_num];
 
     if(ant_tabu_table[city_j]) return 0;
@@ -155,6 +155,7 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
     {
         for(j = 0; j < num_cities; j++)
         {
+            if(i == j) continue; // do not evaporate i <-> i pairs
             float curr = (ant_data->T)[i][j];
             (ant_data->T)[i][j] = ((1 - evaporation_rate) * curr) + quality_heuristic;
         }

@@ -46,7 +46,7 @@ int main()
     std::cout << std::endl << std::endl;
 
     // generating initial random pheremone matrix
-    float** pheremone_matrix = ant_data->T; 
+    matrix_t& pheremone_matrix = ant_data->T; 
     for (i = 0; i < num_cities; i++)
     {
         for (j = 0; j < num_cities; j++)
