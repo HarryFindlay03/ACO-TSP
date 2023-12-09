@@ -3,9 +3,9 @@
 ANT_DATA* generate_ant_data(char* filename, int num_ants, int start_city)
 {
     int num_cities = get_num_cities(filename);
+    const matrix_t& D = generate_distance_matrix(filename, num_cities);
 
-    ANT_DATA* ant_data = new ANT_DATA;
-    ant_data->D = generate_distance_matrix(filename, num_cities);
+    ANT_DATA* ant_data = new ANT_DATA(D);
     ant_data->T = generate_pheremone_matrix(num_cities);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
     ant_data->ant_routes = generate_initial_ant_routes(num_ants, num_cities);
@@ -15,7 +15,7 @@ ANT_DATA* generate_ant_data(char* filename, int num_ants, int start_city)
     return ant_data;
 }
 
-float** generate_distance_matrix(char* filename, int num_cities)
+const matrix_t& generate_distance_matrix(char* filename, int num_cities)
 {
     pugi::xml_document doc;
     // need error handling here
@@ -24,29 +24,27 @@ float** generate_distance_matrix(char* filename, int num_cities)
 
     pugi::xml_node nodes = doc.child("travellingSalesmanProblemInstance").child("graph");
 
-
     int node_count, next_node_count;
     pugi::xml_node node, cost;
 
-    float** distance_matrix = new float*[num_cities];
-
+    matrix_t* distance_matrix = new matrix_t;
     for(node = nodes.first_child(), node_count = 0; node; node_count++, node = node.next_sibling())
     {
-        distance_matrix[node_count] = new float[num_cities];
+        std::vector<float> distances;
         for(cost = node.first_child(), next_node_count = 0; cost; cost = cost.next_sibling(), next_node_count++)
         {
             //ignores itself
-            if(node_count == next_node_count) next_node_count++;
-
+            if(node_count == next_node_count)
+                distances.push_back(0);
+                
             // converting to a double
-            float d;
             const char* s = cost.attribute("cost").value();
-            sscanf(s, "%f", &d);
-            distance_matrix[node_count][next_node_count] = d;
+            distances.push_back(std::stof(s));
         }
+        distance_matrix->push_back(distances);
     }    
 
-    return distance_matrix;
+    return *distance_matrix;
 }
 
 float** generate_pheremone_matrix(int num_cities)

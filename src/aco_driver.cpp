@@ -33,7 +33,7 @@ int main()
     std::cout << "NUM CITIES " << num_cities << std::endl;
 
     // generating distance matrix 
-    float** D = ant_data->D;
+    const matrix_t& D = ant_data->D;
     for (i = 0; i < num_cities; i++)
     {
         for (j = 0; j < num_cities; j++)
