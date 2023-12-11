@@ -9,21 +9,17 @@
 
 #include "../ext/pugixml/pugixml.hpp"
 
-typedef std::vector<std::vector<float> > matrix_t;
-
 typedef struct ant_data_t {
-    const matrix_t& D;
+    float** D;
     float** T;
     int** ant_map;
     int** ant_routes;
     int* num_ants;
     int* num_cities;
-
-    ant_data_t(const matrix_t& D) : D(D) {}
 } ANT_DATA;
 
 ANT_DATA* generate_ant_data(char*, int);
-const matrix_t& generate_distance_matrix(char*, int);
+float** generate_distance_matrix(char*, int);
 float** generate_pheremone_matrix(int);
 int** generate_ant_tabu_tables(int, int);
 void reset_ant_tabu_tables(int**, int, int, int);

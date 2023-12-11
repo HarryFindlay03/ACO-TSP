@@ -3,7 +3,7 @@
 // TODO
 // Tour length is wrong 
 
-float tour_length(const matrix_t& D, int* tour, int num_cities)
+float tour_length(float** D, int* tour, int num_cities)
 {
     float res = 0;
 
@@ -15,7 +15,7 @@ float tour_length(const matrix_t& D, int* tour, int num_cities)
     return res;
 }
 
-int shortest_tour(const matrix_t& D, int** ant_routes, int num_ants, int num_cities)
+int shortest_tour(float** D, int** ant_routes, int num_ants, int num_cities)
 {
     int shortest = 0;
     int i;
@@ -27,7 +27,7 @@ int shortest_tour(const matrix_t& D, int** ant_routes, int num_ants, int num_cit
     return shortest;
 }
 
-float city_pair_distance_heuristic(const matrix_t& D, int x, int y) { return 1 / D[x][y]; }
+float city_pair_distance_heuristic(float** D, int x, int y) { return 1 / D[x][y]; }
 
 void generate_all_ant_routes(ANT_DATA* ant_data, int start_city, float alpha, float beta)
 {
@@ -61,7 +61,7 @@ void generate_ant_route(ANT_DATA* ant_data, int ant_num, int start_city, float a
         i++;
     }
 
-    ant_route[i] = ant_route[0];
+    ant_route[i] = ant_route[0]; // TODO THIS IS BROKEN !!!!
 
     return;
 }
@@ -104,7 +104,7 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, f
     if(city_i == city_j) return 0;
 
     int num_cities = *(ant_data->num_cities);
-    const matrix_t& D = ant_data->D;
+    float** D = ant_data->D;
     float** T = ant_data->T;
     int* ant_tabu_table = (ant_data->ant_map)[ant_num];
 
@@ -172,7 +172,7 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
     return;
 }
 
-float tour_quality_heuristic(const matrix_t& D, int** ant_routes, int num_ants, int num_cities)
+float tour_quality_heuristic(float** D, int** ant_routes, int num_ants, int num_cities)
 {
     float res = 0;
 

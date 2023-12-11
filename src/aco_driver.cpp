@@ -2,6 +2,7 @@
 
 // TODO
 // Look at generating initial tabu tables without start city - fill them only when running 
+// Go back and change const ref and vector -- toooo slow
 
 // TSPLIB ANSWERS
 // BURMA14: 3323
@@ -19,9 +20,11 @@ int main()
     float Q = 5;
     float evaporation_rate = 0.3;
 
+    int i, j;
+
     // reading filename
-    char* filename = new char[sizeof("data/brazil58.xml")];
-    strcpy(filename, "data/brazil58.xml");
+    char* filename = new char[sizeof("data/burma14.xml")];
+    strcpy(filename, "data/burma14.xml");
 
     // generating initial ant data
     ANT_DATA* ant_data = generate_ant_data(filename, num_ants);
@@ -30,12 +33,19 @@ int main()
     std::cout << "NUM CITIES " << num_cities << std::endl;
 
     // distance matrix
-    const matrix_t& D = ant_data->D;
+    float **D = ant_data->D;
 
-    // pheremone matrix
-    float** pheremone_matrix = ant_data->T; 
+    for (i = 0; i < num_cities; i++)
+    {
+        for (j = 0; j < num_cities; j++)
+        {
+            std::cout << D[i][j] << "\t";
+        }
+        std::cout << std::endl;
+    }    // pheremone matrix
 
-    int i, j;
+    float **pheremone_matrix = ant_data->T;
+
     // generating placeholder route
     int* shortest = new int[num_cities];
     for(i = 0; i < num_cities; i++)
@@ -47,7 +57,6 @@ int main()
 
     for (x = 0; x < 1000; x++)
     {
-        std::cout << x << std::endl;
         // random start city
         s = rand() % num_cities;
 

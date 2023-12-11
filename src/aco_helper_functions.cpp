@@ -6,9 +6,9 @@
 ANT_DATA* generate_ant_data(char* filename, int num_ants)
 {
     int num_cities = get_num_cities(filename);
-    const matrix_t& D = generate_distance_matrix(filename, num_cities);
 
-    ANT_DATA* ant_data = new ANT_DATA(D);
+    ANT_DATA* ant_data = new ANT_DATA;
+    ant_data->D = generate_distance_matrix(filename, num_cities);
     ant_data->T = generate_pheremone_matrix(num_cities);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities);
     ant_data->ant_routes = generate_initial_ant_routes(num_ants, num_cities);
@@ -18,7 +18,7 @@ ANT_DATA* generate_ant_data(char* filename, int num_ants)
     return ant_data;
 }
 
-const matrix_t& generate_distance_matrix(char* filename, int num_cities)
+float** generate_distance_matrix(char* filename, int num_cities)
 {
     pugi::xml_document doc;
     // need error handling here
@@ -30,24 +30,24 @@ const matrix_t& generate_distance_matrix(char* filename, int num_cities)
     int node_count, next_node_count;
     pugi::xml_node node, cost;
 
-    matrix_t* distance_matrix = new matrix_t;
+    float** distance_matrix = new float*[num_cities];
     for(node = nodes.first_child(), node_count = 0; node; node_count++, node = node.next_sibling())
     {
         std::vector<float> distances;
+        distance_matrix[node_count] = new float[num_cities];
         for(cost = node.first_child(), next_node_count = 0; cost; cost = cost.next_sibling(), next_node_count++)
         {
             //ignores itself
             if(node_count == next_node_count)
-                distances.push_back(0);
+                distance_matrix[node_count][next_node_count++] = 0;
                 
             // converting to a double
             const char* s = cost.attribute("cost").value();
-            distances.push_back(std::stof(s));
+            distance_matrix[node_count][next_node_count] = std::stof(s);
         }
-        distance_matrix->push_back(distances);
     }    
 
-    return *distance_matrix;
+    return distance_matrix;
 }
 
 float** generate_pheremone_matrix(int num_cities)
