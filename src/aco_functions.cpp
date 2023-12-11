@@ -1,7 +1,7 @@
 #include "../include/aco_functions.hpp"
 
 // TODO
-// Pheremone update
+// Tour length is wrong 
 
 float tour_length(const matrix_t& D, int* tour, int num_cities)
 {
@@ -135,8 +135,9 @@ void lay_pheremones(ANT_DATA* ant_data, float Q)
         int* ant_route = (ant_data->ant_routes)[i];
         float route_length = tour_length(ant_data->D, ant_route, num_cities);
 
-        for(j = 0; j < num_cities; j++)
+        for(j = 0; j < num_cities-1; j++)
             (ant_data->T)[ant_route[j]][ant_route[j+1]] += (Q / route_length);
+        (ant_data->T)[ant_route[j]][ant_route[j-1]] += (Q / route_length); // back to start
     }
 }
 
@@ -155,6 +156,7 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
     {
         for(j = 0; j < num_cities; j++)
         {
+            if(i == j) continue;
             float curr = (ant_data->T)[i][j];
             (ant_data->T)[i][j] = ((1 - evaporation_rate) * curr) + quality_heuristic;
         }

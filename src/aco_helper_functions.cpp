@@ -1,5 +1,8 @@
 #include "../include/aco_helper_functions.hpp"
 
+// TODO
+// reset ant tabu tables before generating ant routes !
+
 ANT_DATA* generate_ant_data(char* filename, int num_ants, int start_city)
 {
     int num_cities = get_num_cities(filename);
@@ -90,14 +93,16 @@ int** generate_ant_tabu_tables(int num_ants, int num_cities, int start_city)
         mp[i] = new int[num_cities];
         for(j = 0; j < num_cities; j++)
         {
-            if(j == start_city)
-            {
-                mp[i][j] = 1;
-                continue;
-            }
+            // if(j == start_city)
+            // {
+            //     mp[i][j] = 1;
+            //     continue;
+            // }
             mp[i][j] = 0;
         }
     }
+
+    reset_ant_tabu_tables(mp, num_ants, num_cities, start_city);
 
     return mp;
 }
