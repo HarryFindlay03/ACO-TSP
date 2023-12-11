@@ -4,9 +4,9 @@ ANT_DATA* generate_ant_data(char* filename, int num_ants, int start_city)
 {
     int num_cities = get_num_cities(filename);
     const matrix_t& D = generate_distance_matrix(filename, num_cities);
-    matrix_t& T = generate_pheremone_matrix(num_cities);
 
-    ANT_DATA* ant_data = new ANT_DATA(D, T);
+    ANT_DATA* ant_data = new ANT_DATA(D);
+    ant_data->T = generate_pheremone_matrix(num_cities);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
     ant_data->ant_routes = generate_initial_ant_routes(num_ants, num_cities);
     ant_data->num_ants = new int(num_ants);
@@ -47,26 +47,39 @@ const matrix_t& generate_distance_matrix(char* filename, int num_cities)
     return *distance_matrix;
 }
 
-matrix_t& generate_pheremone_matrix(int num_cities)
+float** generate_pheremone_matrix(int num_cities)
 {
+    // pheremone matrix will be one row longer than required to store the starting pheremones
+    // a psuedo-start node is represented to allow for a actual start node in the graph to be selected.
+
     // ensure prng has been seeded well prior to calling this function
-    matrix_t* pheremone_matrix = new matrix_t;
+    float** pheremone_matrix = new float*[num_cities];
 
     int i, j;
     for(i = 0; i < num_cities; i++)
     {
-        std::vector<float> pheremone_row;
+        pheremone_matrix[i] = new float[num_cities];
         for(j = 0; j < num_cities; j++)
         {
-            // interesting compiler optimisation happening here if ternary operator used
-            if (i == j) 
-                pheremone_row.push_back(0);
-            pheremone_row.push_back((float)rand() / RAND_MAX);
+            if(i == j)
+            {
+                pheremone_matrix[i][j] = 0;
+                continue;
+            }
+
+            float random_number = (float)rand() / RAND_MAX;
+            pheremone_matrix[i][j] = random_number;
         }
-        pheremone_matrix->push_back(pheremone_row);
     }
 
-    return *pheremone_matrix;
+    // pheremone levels for pseudostart node
+    // pheremone_matrix[i] = new float[num_cities];
+    // for(j = 0; j < num_cities; j++)
+    // {
+    //     pheremone_matrix[i][j] = (float)rand() / RAND_MAX;
+    // }
+
+    return pheremone_matrix;
 }
 
 int** generate_ant_tabu_tables(int num_ants, int num_cities, int start_city)
