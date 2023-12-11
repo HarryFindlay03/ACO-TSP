@@ -22,10 +22,10 @@ typedef struct ant_data_t {
     ant_data_t(const matrix_t& D) : D(D) {}
 } ANT_DATA;
 
-ANT_DATA* generate_ant_data(char*, int, int);
+ANT_DATA* generate_ant_data(char*, int);
 const matrix_t& generate_distance_matrix(char*, int);
 float** generate_pheremone_matrix(int);
-int** generate_ant_tabu_tables(int, int, int);
+int** generate_ant_tabu_tables(int, int);
 void reset_ant_tabu_tables(int**, int, int, int);
 int** generate_initial_ant_routes(int, int);
 int get_num_cities(char*);

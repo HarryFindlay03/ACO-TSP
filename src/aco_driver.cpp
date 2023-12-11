@@ -14,7 +14,6 @@ int main()
 
     // PARAMETERS
     int num_ants = 10;
-    int start_city = 0;
     float alpha = 0.9;
     float beta = 0.5;
     float Q = 5;
@@ -25,7 +24,7 @@ int main()
     strcpy(filename, "data/burma14.xml");
 
     // generating initial ant data
-    ANT_DATA* ant_data = generate_ant_data(filename, num_ants, start_city);
+    ANT_DATA* ant_data = generate_ant_data(filename, num_ants);
     int num_cities = *(ant_data->num_cities);
 
     std::cout << "NUM CITIES " << num_cities << std::endl;
@@ -46,7 +45,7 @@ int main()
     int x, s, shortest_tour_pos;
     int shortest_route_iteration = 0;
 
-    for(s = start_city; s < num_cities; s++)
+    for(s = 0; s < num_cities; s++)
     {
         for (x = 0; x < 1000; x++)
         {
@@ -63,7 +62,7 @@ int main()
                 shortest_route_iteration = x;
             }
 
-            prepare_new_run(ant_data, start_city, Q, evaporation_rate);
+            prepare_new_run(ant_data, s, Q, evaporation_rate);
         }
     }
 

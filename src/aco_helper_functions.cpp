@@ -3,14 +3,14 @@
 // TODO
 // reset ant tabu tables before generating ant routes !
 
-ANT_DATA* generate_ant_data(char* filename, int num_ants, int start_city)
+ANT_DATA* generate_ant_data(char* filename, int num_ants)
 {
     int num_cities = get_num_cities(filename);
     const matrix_t& D = generate_distance_matrix(filename, num_cities);
 
     ANT_DATA* ant_data = new ANT_DATA(D);
     ant_data->T = generate_pheremone_matrix(num_cities);
-    ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities, start_city);
+    ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities);
     ant_data->ant_routes = generate_initial_ant_routes(num_ants, num_cities);
     ant_data->num_ants = new int(num_ants);
     ant_data->num_cities = new int(num_cities);
@@ -75,7 +75,7 @@ float** generate_pheremone_matrix(int num_cities)
     return pheremone_matrix;
 }
 
-int** generate_ant_tabu_tables(int num_ants, int num_cities, int start_city)
+int** generate_ant_tabu_tables(int num_ants, int num_cities)
 {
     int** mp = new int*[num_ants];
     int i, j;
