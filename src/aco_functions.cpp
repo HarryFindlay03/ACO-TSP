@@ -33,6 +33,9 @@ void generate_all_ant_routes(ANT_DATA* ant_data, int start_city, float alpha, fl
     int i;
     int num_ants = *(ant_data->num_ants);
     int num_cities = *(ant_data->num_cities);
+
+    // reset ant_tabu_tables
+    reset_ant_tabu_tables(ant_data->ant_map, num_ants, num_cities, start_city);
      
     // for each ant
     for(i = 0; i < num_ants; i++)
@@ -137,7 +140,7 @@ void lay_pheremones(ANT_DATA* ant_data, float Q)
 
         for(j = 0; j < num_cities-1; j++)
             (ant_data->T)[ant_route[j]][ant_route[j+1]] += (Q / route_length);
-        (ant_data->T)[ant_route[j]][ant_route[j-1]] += (Q / route_length); // back to start
+        (ant_data->T)[ant_route[j]][ant_route[0]] += (Q / route_length); // back to start
     }
 }
 

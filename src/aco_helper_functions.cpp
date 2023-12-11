@@ -52,9 +52,6 @@ const matrix_t& generate_distance_matrix(char* filename, int num_cities)
 
 float** generate_pheremone_matrix(int num_cities)
 {
-    // pheremone matrix will be one row longer than required to store the starting pheremones
-    // a psuedo-start node is represented to allow for a actual start node in the graph to be selected.
-
     // ensure prng has been seeded well prior to calling this function
     float** pheremone_matrix = new float*[num_cities];
 
@@ -75,13 +72,6 @@ float** generate_pheremone_matrix(int num_cities)
         }
     }
 
-    // pheremone levels for pseudostart node
-    // pheremone_matrix[i] = new float[num_cities];
-    // for(j = 0; j < num_cities; j++)
-    // {
-    //     pheremone_matrix[i][j] = (float)rand() / RAND_MAX;
-    // }
-
     return pheremone_matrix;
 }
 
@@ -89,20 +79,14 @@ int** generate_ant_tabu_tables(int num_ants, int num_cities, int start_city)
 {
     int** mp = new int*[num_ants];
     int i, j;
-    for(i = 0; i < num_ants; i++) {
+    for(i = 0; i < num_ants; i++)
+    {
         mp[i] = new int[num_cities];
         for(j = 0; j < num_cities; j++)
         {
-            // if(j == start_city)
-            // {
-            //     mp[i][j] = 1;
-            //     continue;
-            // }
             mp[i][j] = 0;
         }
     }
-
-    reset_ant_tabu_tables(mp, num_ants, num_cities, start_city);
 
     return mp;
 }
@@ -111,8 +95,15 @@ void reset_ant_tabu_tables(int** ant_tabu_tables, int num_ants, int num_cities, 
 {
     int i, j;
     for(i = 0; i < num_ants; i++)
-        for(j = 0; j < num_cities; j++)
-            (start_city == j) ? ant_tabu_tables[i][j] = 1 : ant_tabu_tables[i][j] = 0;
+    {
+        for (j = 0; j < num_cities; j++)
+        {
+            if(start_city == j)
+                ant_tabu_tables[i][j] = 1;
+            else
+                ant_tabu_tables[i][j] = 0;
+        }
+    }
 
     return;
 }
