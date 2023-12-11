@@ -8,8 +8,9 @@ float tour_length(const matrix_t& D, int* tour, int num_cities)
     float res = 0;
 
     int i;
-    for(i = 0; i < num_cities; i++)
+    for(i = 0; i < num_cities-1; i++)
         res += D[tour[i]][tour[i+1]];
+    res += D[tour[i]][tour[0]];
 
     return res;
 }
@@ -154,14 +155,17 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
     // computing the quality heuristic
     float quality_heuristic = tour_quality_heuristic(ant_data->D, ant_data->ant_routes, num_ants, num_cities);
 
+    float** T = ant_data->T;
     // evaporate the pheremones
     for(i = 0; i < num_cities; i++)
     {
         for(j = 0; j < num_cities; j++)
         {
             if(i == j) continue;
-            float curr = (ant_data->T)[i][j];
-            (ant_data->T)[i][j] = ((1 - evaporation_rate) * curr) + quality_heuristic;
+            if(T[i][j] == 0) continue; // TEST
+
+            float curr = T[i][j];
+            T[i][j] = ((1 - evaporation_rate) * curr) + quality_heuristic;
         }
     }
 
