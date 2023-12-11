@@ -22,28 +22,19 @@ int main()
 
     int i, j;
 
-    // reading filename
-    char* filename = new char[sizeof("data/burma14.xml")];
-    strcpy(filename, "data/burma14.xml");
+    // ENTER PATH OF FILENAME HERE - FROM ROOT
+    std::string filename("data/burma14.xml");
+    std::cout << "FILENAME: " << filename << std::endl;
 
     // generating initial ant data
-    ANT_DATA* ant_data = generate_ant_data(filename, num_ants);
+    ANT_DATA* ant_data = generate_ant_data(filename.c_str(), num_ants);
     int num_cities = *(ant_data->num_cities);
 
-    std::cout << "NUM CITIES " << num_cities << std::endl;
 
     // distance matrix
     float **D = ant_data->D;
 
-    for (i = 0; i < num_cities; i++)
-    {
-        for (j = 0; j < num_cities; j++)
-        {
-            std::cout << D[i][j] << "\t";
-        }
-        std::cout << std::endl;
-    }    // pheremone matrix
-
+    // pheremone matrix
     float **pheremone_matrix = ant_data->T;
 
     // generating placeholder route
@@ -55,10 +46,19 @@ int main()
     int x, s, shortest_tour_pos;
     int shortest_route_iteration = 0;
 
-    for (x = 0; x < 1000; x++)
+    int iterations_per_city = 10000;
+    int total_iterations = iterations_per_city * num_cities;
+
+    std::cout << std::fixed;
+    std::cout.precision(0);
+
+    for (x = 0; x < total_iterations; x++)
     {
-        // random start city
-        s = rand() % num_cities;
+        std::cout << "PROGRESS: " << ((float)x / total_iterations) * 100 << "%\t\r" << std::flush;
+        if((x != 0) && (x % iterations_per_city == 0))
+        {
+            s++;
+        }
 
         generate_all_ant_routes(ant_data, s, alpha, beta);
 
@@ -72,21 +72,10 @@ int main()
             shortest_route_iteration = x;
         }
 
-        /* OUTPUT ANT DATA */
-        // std::cout << "TEST ANT ROUTES: " << x << std::endl;
-        // std::cout << std::fixed;
-        // for (i = 0; i < num_ants; i++)
-        // {
-        //     int *ant_route = (ant_data->ant_routes)[i];
-        //     std::cout << "ANT " << i << std::endl;
-        //     for (j = 0; j <= num_cities; j++)
-        //         std::cout << ant_route[j] << " ";
-        //     std::cout << "\t Tour Length: " << tour_length(ant_data->D, ant_route, num_cities) << std::endl;
-        // }
-
         prepare_new_run(ant_data, s, Q, evaporation_rate);
     }
 
+    std::cout << std::endl << std::endl;
     std::cout << std::fixed;
     std::cout << "SHORTEST ROUTE FOUND: ";
     for(i = 0; i < num_cities; i++)

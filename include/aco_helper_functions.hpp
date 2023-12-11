@@ -18,12 +18,12 @@ typedef struct ant_data_t {
     int* num_cities;
 } ANT_DATA;
 
-ANT_DATA* generate_ant_data(char*, int);
-float** generate_distance_matrix(char*, int);
+ANT_DATA* generate_ant_data(const char*, int);
+float** generate_distance_matrix(const char*, int);
 float** generate_pheremone_matrix(int);
 int** generate_ant_tabu_tables(int, int);
 void reset_ant_tabu_tables(int**, int, int, int);
 int** generate_initial_ant_routes(int, int);
-int get_num_cities(char*);
+int get_num_cities(const char*);
 
 #endif

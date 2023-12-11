@@ -3,7 +3,7 @@
 // TODO
 // reset ant tabu tables before generating ant routes !
 
-ANT_DATA* generate_ant_data(char* filename, int num_ants)
+ANT_DATA* generate_ant_data(const char* filename, int num_ants)
 {
     int num_cities = get_num_cities(filename);
 
@@ -18,7 +18,7 @@ ANT_DATA* generate_ant_data(char* filename, int num_ants)
     return ant_data;
 }
 
-float** generate_distance_matrix(char* filename, int num_cities)
+float** generate_distance_matrix(const char* filename, int num_cities)
 {
     pugi::xml_document doc;
     // need error handling here
@@ -33,7 +33,6 @@ float** generate_distance_matrix(char* filename, int num_cities)
     float** distance_matrix = new float*[num_cities];
     for(node = nodes.first_child(), node_count = 0; node; node_count++, node = node.next_sibling())
     {
-        std::vector<float> distances;
         distance_matrix[node_count] = new float[num_cities];
         for(cost = node.first_child(), next_node_count = 0; cost; cost = cost.next_sibling(), next_node_count++)
         {
@@ -118,7 +117,7 @@ int** generate_initial_ant_routes(int num_ants, int num_cities)
     return ant_routes;
 }
 
-int get_num_cities(char* filename)
+int get_num_cities(const char* filename)
 {
     pugi::xml_document doc;
 
