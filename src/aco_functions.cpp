@@ -18,11 +18,18 @@ float tour_length(float** D, int* tour, int num_cities)
 int shortest_tour(float** D, int** ant_routes, int num_ants, int num_cities)
 {
     int shortest = 0;
+    
     int i;
-
     for(i = 1; i < num_ants; i++)
-        if(tour_length(D, ant_routes[i], num_cities) < tour_length(D, ant_routes[shortest], num_cities))
+    {
+        int* ant_route = ant_routes[i];
+        int* curr_shortest = ant_routes[shortest];
+
+        if(tour_length(D, ant_route, num_cities) < tour_length(D, curr_shortest, num_cities))
+        {
             shortest = i;
+        }
+    }
 
     return shortest;
 }
@@ -50,30 +57,30 @@ void generate_ant_route(ANT_DATA* ant_data, int ant_num, int start_city, float a
     int num_ants = *(ant_data->num_ants);
     int num_cities = *(ant_data->num_cities); 
     int* ant_route = (ant_data->ant_routes)[ant_num];
+
     ant_route[0] = start_city;
 
-    int i = 1;
-    while(i < num_cities)
+    int i;
+    for(i = 0; i < num_cities-1; i++)
     {
-        int next = get_next_city(ant_data, ant_num, ant_route[i-1], alpha, beta);
-        ant_route[i] = next;
+        int next = get_next_city(ant_data, ant_num, ant_route[i], alpha, beta);
+        
+        // updating current ant route and ant tabu table
+        ant_route[i+1] = next;
         (ant_data->ant_map)[ant_num][next] = 1;
-        i++;
     }
-
-    ant_route[i] = ant_route[0]; // TODO THIS IS BROKEN !!!!
 
     return;
 }
 
-int get_next_city(ANT_DATA* ant_data, int ant_num, int start_city, float alpha, float beta)
+int get_next_city(ANT_DATA* ant_data, int ant_num, int current_city, float alpha, float beta)
 {
     int num_cities = *(ant_data->num_cities);
     int i;
     float probs[num_cities];
 
     for(i = 0; i < num_cities; i++)
-        probs[i] = transition_rule(ant_data, ant_num, start_city, i, alpha, beta);
+        probs[i] = transition_rule(ant_data, ant_num, current_city, i, alpha, beta);
 
     int pos = 0;
     int remaining_cities[num_cities]; // only need ever be as big as num_cities
@@ -101,14 +108,14 @@ int get_next_city(ANT_DATA* ant_data, int ant_num, int start_city, float alpha, 
 
 float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, float alpha, float beta)
 {
-    if(city_i == city_j) return 0;
-
     int num_cities = *(ant_data->num_cities);
     float** D = ant_data->D;
     float** T = ant_data->T;
     int* ant_tabu_table = (ant_data->ant_map)[ant_num];
 
-    if(ant_tabu_table[city_j]) return 0;
+    // TEST CASES
+    if(city_i == city_j) return 0; // trying to visit the same city
+    if(ant_tabu_table[city_j]) return 0; // if next city to visit is already visited
 
     float nom, dom;
 

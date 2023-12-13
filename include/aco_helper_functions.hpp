@@ -20,10 +20,16 @@ typedef struct ant_data_t {
 
 ANT_DATA* generate_ant_data(const char*, int);
 float** generate_distance_matrix(const char*, int);
-float** generate_pheremone_matrix(int);
+float** generate_pheremone_matrix(float**, int);
 int** generate_ant_tabu_tables(int, int);
 void reset_ant_tabu_tables(int**, int, int, int);
 int** generate_initial_ant_routes(int, int);
 int get_num_cities(const char*);
+
+// NEAREST NEIGHBOUR HEURISTIC
+float nearest_neighbour_tour_length(float**, int, int);
+int nearest_neighbour_get_next_city(float**, int*, int, int);
+float shortest_nn_tour(float**, int);
+float nn_tour_length(float**, int*, int);
 
 #endif

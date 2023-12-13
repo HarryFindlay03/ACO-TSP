@@ -9,7 +9,7 @@ ANT_DATA* generate_ant_data(const char* filename, int num_ants)
 
     ANT_DATA* ant_data = new ANT_DATA;
     ant_data->D = generate_distance_matrix(filename, num_cities);
-    ant_data->T = generate_pheremone_matrix(num_cities);
+    ant_data->T = generate_pheremone_matrix(ant_data->D, num_cities);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities);
     ant_data->ant_routes = generate_initial_ant_routes(num_ants, num_cities);
     ant_data->num_ants = new int(num_ants);
@@ -49,10 +49,13 @@ float** generate_distance_matrix(const char* filename, int num_cities)
     return distance_matrix;
 }
 
-float** generate_pheremone_matrix(int num_cities)
+float** generate_pheremone_matrix(float** D, int num_cities)
 {
     // ensure prng has been seeded well prior to calling this function
     float** pheremone_matrix = new float*[num_cities];
+
+    // nearest neighbour tour heuristic value
+    float nn_tour_heurisitc = (1 / shortest_nn_tour(D, num_cities));
 
     int i, j;
     for(i = 0; i < num_cities; i++)
@@ -66,8 +69,9 @@ float** generate_pheremone_matrix(int num_cities)
                 continue;
             }
 
-            float random_number = (float)rand() / RAND_MAX;
-            pheremone_matrix[i][j] = random_number;
+            // USING NEAREST NEIGHBOUR HEURISTIC TO SET INITIAL PHEREMONE LEVEL
+            // DORIGO, SUTZE, Ant Colonty Optimization
+            pheremone_matrix[i][j] = nn_tour_heurisitc;
         }
     }
 
@@ -134,4 +138,87 @@ int get_num_cities(const char* filename)
         node_count++;
 
     return node_count;
+}
+
+// BELOW CODE IS FOR NEAREST NEIGHBOUR HEURISTIC
+float nearest_neighbour_tour_length(float** D, int num_cities, int start_city)
+{
+    int* nn_tour = new int[num_cities];
+    int* visited = new int[num_cities];
+
+    nn_tour[0] = start_city;
+    visited[start_city] = 1;
+
+    int i, next;
+    for(i = 1; i < num_cities; i++)
+    {
+        next = nearest_neighbour_get_next_city(D, visited, num_cities, nn_tour[i-1]);
+        nn_tour[i] = next;
+        visited[next] = 1; 
+    }
+
+    delete[] visited;
+
+    // get tour length
+    float res = nn_tour_length(D, nn_tour, num_cities);
+
+    delete[] nn_tour;
+
+    return res;
+}
+
+int nearest_neighbour_get_next_city(float** D, int* visited, int num_cities, int curr_city)
+{
+    // get row of tour pos
+    float* curr_row = D[curr_city];
+
+    // set shortest to the first unvisited node
+    int i, shortest;
+    for(i = 0; i < num_cities; i++)
+    {
+        if(!visited[i])
+        {
+            shortest = i;
+            break;
+        }
+    }
+
+    // go from shortest onwards
+    for(i = shortest; i < num_cities; i++)
+    {
+        if((!visited[i]) && (curr_row[i] != 0) && (curr_row[i] < curr_row[shortest]))
+            shortest = i;
+    }
+
+    return shortest;
+}
+
+float shortest_nn_tour(float** D, int num_cities)
+{
+    float shortest = nearest_neighbour_tour_length(D, num_cities, 0);
+
+    float curr;
+    int i;
+    for(i = 1; i < num_cities; i++)
+    {
+        curr = nearest_neighbour_tour_length(D, num_cities, i);
+        if(curr < shortest)
+        {
+            shortest = curr;
+        }
+    }
+
+    return shortest;
+}
+
+float nn_tour_length(float** D, int* tour, int num_cities)
+{
+    float res = 0;
+
+    int i;
+    for(i = 0; i < num_cities-1; i++)
+        res += D[tour[i]][tour[i+1]];
+    res += D[tour[i]][tour[0]];
+
+    return res;
 }

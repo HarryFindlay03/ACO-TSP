@@ -14,7 +14,7 @@ int main()
     // srand(time(0));
 
     // PARAMETERS
-    int num_ants = 15;
+    int num_ants = 10;
     float alpha = 0.9;
     float beta = 0.5;
     float Q = 5;
@@ -24,12 +24,13 @@ int main()
 
     // ENTER PATH OF FILENAME HERE - FROM ROOT
     std::string filename("data/burma14.xml");
-    std::cout << "FILENAME: " << filename << std::endl;
+    std::cout << std::endl << "FILENAME: " << filename << std::endl << std::endl;
 
     // generating initial ant data
     ANT_DATA* ant_data = generate_ant_data(filename.c_str(), num_ants);
     int num_cities = *(ant_data->num_cities);
 
+    std::cout << "NUMBER OF CITIES: " << num_cities << std::endl << std::endl;
 
     // distance matrix
     float **D = ant_data->D;
@@ -46,19 +47,22 @@ int main()
     int x, s, shortest_tour_pos;
     int shortest_route_iteration = 0;
 
-    int iterations_per_city = 10000;
+    int iterations_per_city = 1000;
     int total_iterations = iterations_per_city * num_cities;
 
     std::cout << std::fixed;
     std::cout.precision(0);
 
+    s = 0;
     for (x = 0; x < total_iterations; x++)
     {
+
         std::cout << "PROGRESS: " << ((float)x / total_iterations) * 100 << "%\t\r" << std::flush;
-        if((x != 0) && (x % iterations_per_city == 0))
+        if((x % iterations_per_city == 0) && (x != 0) && (!(s >= num_cities)))
         {
             s++;
         }
+        // s = rand() % num_cities;
 
         generate_all_ant_routes(ant_data, s, alpha, beta);
 
