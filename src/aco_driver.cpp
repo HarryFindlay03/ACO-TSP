@@ -15,15 +15,16 @@ int main()
 
     // PARAMETERS
     int num_ants = 10;
-    float alpha = 0.9;
-    float beta = 0.5;
-    float Q = 5;
-    float evaporation_rate = 0.3;
+    float alpha = 1;
+    float beta = 2;
+    float Q = 1; // ACO BOOK SAYS Q = 1
+    float evaporation_rate = 0.5;
 
     int i, j;
 
     // ENTER PATH OF FILENAME HERE - FROM ROOT
-    std::string filename("data/burma14.xml");
+    // std::string filename("data/burma14.xml");
+    std::string filename("data/brazil58.xml");
     std::cout << std::endl << "FILENAME: " << filename << std::endl << std::endl;
 
     // generating initial ant data
@@ -47,22 +48,17 @@ int main()
     int x, s, shortest_tour_pos;
     int shortest_route_iteration = 0;
 
-    int iterations_per_city = 1000;
-    int total_iterations = iterations_per_city * num_cities;
+    int total_iterations = 20000;
 
     std::cout << std::fixed;
     std::cout.precision(0);
 
-    s = 0;
     for (x = 0; x < total_iterations; x++)
     {
 
         std::cout << "PROGRESS: " << ((float)x / total_iterations) * 100 << "%\t\r" << std::flush;
-        if((x % iterations_per_city == 0) && (x != 0) && (!(s >= num_cities)))
-        {
-            s++;
-        }
-        // s = rand() % num_cities;
+
+        s = rand() % num_cities;
 
         generate_all_ant_routes(ant_data, s, alpha, beta);
 
