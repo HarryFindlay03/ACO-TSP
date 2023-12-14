@@ -2,6 +2,10 @@
 
 // TODO - rewrite get_next_city function
 
+//
+// ANT ROUTE FUNCTION
+//
+
 float tour_length(float** D, int* tour, int num_cities)
 {
     float res = 0;
@@ -41,7 +45,7 @@ void generate_all_ant_routes(ANT_DATA* ant_data, int start_city, float alpha, fl
     int num_ants = *(ant_data->num_ants);
     int num_cities = *(ant_data->num_cities);
 
-    // reset ant_tabu_tables
+    // prepare ant tabu tables for new generation
     reset_ant_tabu_tables(ant_data->ant_map, num_ants, num_cities, start_city);
      
     // for each ant
@@ -111,6 +115,10 @@ int get_next_city(ANT_DATA* ant_data, int ant_num, int current_city, float alpha
     return res_return;
 }
 
+//
+// TRANSITION RULE
+//
+
 float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, float alpha, float beta)
 {
     int num_cities = *(ant_data->num_cities);
@@ -139,6 +147,10 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, f
 
     return (nom / dom);
 }
+
+//
+// PHEREMOME FUNCTIONS
+//
 
 void lay_pheremones(ANT_DATA* ant_data, float Q)
 {
@@ -175,8 +187,9 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
     {
         for(j = 0; j < num_cities; j++)
         {
+            // do not update unwanted pheremone values
             if(i == j) continue;
-            if(T[i][j] == 0) continue; // TEST
+            if(T[i][j] == 0) continue;
 
             float curr = T[i][j];
             T[i][j] = ((1 - evaporation_rate) * curr) + quality_heuristic;

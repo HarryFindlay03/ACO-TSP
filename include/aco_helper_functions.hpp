@@ -45,7 +45,7 @@ typedef struct ant_data_t {
  * @param num_ants number of ants in the system
  * @param num_cities number of cities in the optimisation
  * 
- * @return ANT_DATA* - pointer to a generated ant_data_t structure
+ * @return ANT_DATA*
  */
 ANT_DATA* generate_ant_data(const char*, int, int);
 
@@ -65,7 +65,7 @@ float** generate_distance_matrix(const char*, int);
  * @param D distance matrix
  * @param num_cities number of cities in distance matrix
  * 
- * @return float** - 2D array that stores pheremone matrix
+ * @return float**
  */
 float** generate_pheremone_matrix(float**, int);
 
@@ -75,7 +75,7 @@ float** generate_pheremone_matrix(float**, int);
  * @param num_ants number of ants in the system
  * @param num_cities number of cities in the optimisation
  * 
- * @return int** - 2D array storing ant tabu tables
+ * @return int**
  */
 int** generate_ant_tabu_tables(int, int);
 
@@ -96,7 +96,7 @@ void reset_ant_tabu_tables(int**, int, int, int);
  * @param num_ants number of ants in the system
  * @param num_cities number of cities in the optimisation
  * 
- * @return int** - 2D array storing the ant routes
+ * @return int**
  */
 int** generate_initial_ant_routes(int, int);
 
@@ -105,7 +105,7 @@ int** generate_initial_ant_routes(int, int);
  * 
  * @param filename file to get number of cities from
  * 
- * @return int - number of cities
+ * @return int
  */
 int get_num_cities(const char*);
 
@@ -120,7 +120,7 @@ int get_num_cities(const char*);
  * @param num_cities number of cities in distance matrix
  * @param start_city city to start NN heuristic from
  * 
- * @return float - length of NN tour from start_city
+ * @return float
  */
 float nearest_neighbour_tour_length(float**, int, int);
 
@@ -133,7 +133,7 @@ float nearest_neighbour_tour_length(float**, int, int);
  * @param num_cities number of cities in the optimisation
  * @param curr_city city to find next city from
  * 
- * @return int - next city to visit
+ * @return int
  */
 int nearest_neighbour_get_next_city(float**, int*, int, int);
 
@@ -144,7 +144,7 @@ int nearest_neighbour_get_next_city(float**, int*, int, int);
  * @param D distance matrix
  * @param num_cities number of cities in the optimisation
  * 
- * @return float - length of shortest NN tour.
+ * @return float
  */
 float shortest_nn_tour(float**, int);
 
@@ -155,7 +155,7 @@ float shortest_nn_tour(float**, int);
  * @param tour tour to find distance of
  * @param num_cities number of cities in the optimisation
  * 
- * @return float - length of given tour
+ * @return float
  */
 float helper_tour_length(float**, int*, int);
 
@@ -165,7 +165,7 @@ float helper_tour_length(float**, int*, int);
  * 
  * @param tour: tour to check validity of
  * @param num_cities: number of cities in the input 
- * @return boolean true for if tour is valid false otherwise 
+ * @return int (boolean)
  */
 int tour_valid(int*, int);
 
@@ -179,7 +179,7 @@ int tour_valid(int*, int);
  * @param generation_shortest new shortest route to be copied
  * @param num_cities number of cities:w
  * 
- * @return true if generation_shortest is copied into shortest, false otherwise
+ * @return int (boolean)
  */
 int copy_shortest(float**, int*, int*, int);
 
