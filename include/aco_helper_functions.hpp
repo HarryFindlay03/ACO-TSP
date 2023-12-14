@@ -32,4 +32,14 @@ int nearest_neighbour_get_next_city(float**, int*, int, int);
 float shortest_nn_tour(float**, int);
 float nn_tour_length(float**, int*, int);
 
+// VALIDITY CHECKS
+/**
+ * @brief Checking that a given tour is valid and only visits each city once
+ * 
+ * @param tour: tour to check validity of
+ * @param num_cities: number of cities in the input 
+ * @return boolean true for if tour is valid false otherwise 
+ */
+int tour_valid(int*, int);
+
 #endif

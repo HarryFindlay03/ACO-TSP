@@ -14,7 +14,7 @@ int main()
     // srand(time(0));
 
     // PARAMETERS
-    int num_ants = 10;
+    int num_ants = 20;
     float alpha = 1;
     float beta = 2;
     float Q = 1; // ACO BOOK SAYS Q = 1
@@ -23,8 +23,8 @@ int main()
     int i, j;
 
     // ENTER PATH OF FILENAME HERE - FROM ROOT
-    // std::string filename("data/burma14.xml");
-    std::string filename("data/brazil58.xml");
+    std::string filename("data/burma14.xml");
+    // std::string filename("data/brazil58.xml");
     std::cout << std::endl << "FILENAME: " << filename << std::endl << std::endl;
 
     // generating initial ant data
@@ -80,7 +80,11 @@ int main()
     std::cout << "SHORTEST ROUTE FOUND: ";
     for(i = 0; i < num_cities; i++)
         std::cout << shortest[i] << " ";
-    std::cout << shortest[0] << "\nTOUR LENGTH: " << tour_length(D, shortest, num_cities) << "\tITERATION: " << shortest_route_iteration << std::endl;
+    std::cout << shortest[0] << "\nTOUR LENGTH: " << tour_length(D, shortest, num_cities) << "\nITERATION: " << shortest_route_iteration << std::endl;
+
+    std::string valid;
+    (tour_valid(shortest, num_cities)) ? valid = "✅" : valid = "❌";
+    std::cout << "VALID: " << valid << std::endl << std::endl;
 
     return 0;
 }

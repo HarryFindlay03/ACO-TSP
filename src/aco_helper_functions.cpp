@@ -222,3 +222,25 @@ float nn_tour_length(float** D, int* tour, int num_cities)
 
     return res;
 }
+
+// VALIDITY CHECKS
+
+int tour_valid(int* tour, int num_cities)
+{
+    int i, j, count, curr;
+    for(i = 0; i < num_cities; i++)
+    {
+        count = 0;
+        for(j = 0; j < num_cities; j++)
+        {
+            if(tour[j] == tour[i])
+            {
+                count++;
+            }
+        }
+        if(count != 1)
+            return 0;
+    }
+
+    return 1;
+}
