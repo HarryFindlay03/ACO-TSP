@@ -1,12 +1,11 @@
 #include "../include/aco_helper_functions.hpp"
 
-// TODO
-// reset ant tabu tables before generating ant routes !
+//
+// ANT SYSTEM SETUP FUNCTIONS
+//
 
-ANT_DATA* generate_ant_data(const char* filename, int num_ants)
+ANT_DATA* generate_ant_data(const char* filename, int num_ants, int num_cities)
 {
-    int num_cities = get_num_cities(filename);
-
     ANT_DATA* ant_data = new ANT_DATA;
     ant_data->D = generate_distance_matrix(filename, num_cities);
     ant_data->T = generate_pheremone_matrix(ant_data->D, num_cities);
@@ -140,7 +139,10 @@ int get_num_cities(const char* filename)
     return node_count;
 }
 
-// BELOW CODE IS FOR NEAREST NEIGHBOUR HEURISTIC
+//
+// NEAREST NEIGHBOUR HEURISTIC
+//
+
 float nearest_neighbour_tour_length(float** D, int num_cities, int start_city)
 {
     int* nn_tour = new int[num_cities];
@@ -223,7 +225,9 @@ float helper_tour_length(float** D, int* tour, int num_cities)
     return res;
 }
 
+//
 // VALIDITY CHECKS
+//
 
 int tour_valid(int* tour, int num_cities)
 {
@@ -245,7 +249,9 @@ int tour_valid(int* tour, int num_cities)
     return 1;
 }
 
+//
 // MISC HELP FUNCTIONS
+//
 
 int copy_shortest(float** D, int* shortest, int* generation_shortest, int num_cities)
 {

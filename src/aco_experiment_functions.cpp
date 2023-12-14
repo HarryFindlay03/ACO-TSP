@@ -2,7 +2,7 @@
 
 void run_ant_system(std::string filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations)
 {
-    ANT_DATA* ant_data = generate_ant_data(filename.c_str(), num_ants);
+    ANT_DATA* ant_data = generate_ant_data(filename.c_str(), num_ants, num_cities);
 
     int shortest_tour_position, shortest_tour_iteration;
 

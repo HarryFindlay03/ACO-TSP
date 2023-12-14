@@ -2,6 +2,8 @@
 
 #define ACO_HELPER_FUNCTIONS_H
 
+// relevant includes
+
 #include <iostream>
 #include <map>
 #include <cstdlib>
@@ -9,6 +11,20 @@
 
 #include "../ext/pugixml/pugixml.hpp"
 
+//
+// typedef struct
+//
+
+/**
+ * @brief ant_data_t structure that stores all relevant information about ant
+ * 
+ * @param D distance matrix
+ * @param T pheremone matrix
+ * @param ant_map ant tabu tables
+ * @param ant_routes current ant routes
+ * @param num_ants number of ants in the system
+ * @param num_cities number of cities in the optimisation
+ */
 typedef struct ant_data_t {
     float** D;
     float** T;
@@ -18,18 +34,129 @@ typedef struct ant_data_t {
     int* num_cities;
 } ANT_DATA;
 
-ANT_DATA* generate_ant_data(const char*, int);
+//
+// ANT SYSTEM SETUP FUNCTIONS
+//
+
+/**
+ * @brief generates and returns necessary ant data
+ * 
+ * @param filename string representing filename (location of file from root of program execution)
+ * @param num_ants number of ants in the system
+ * @param num_cities number of cities in the optimisation
+ * 
+ * @return ANT_DATA* - pointer to a generated ant_data_t structure
+ */
+ANT_DATA* generate_ant_data(const char*, int, int);
+
+/**
+ * @brief generate and returns distance matrix given filename and number of cities in the given input file
+ * 
+ * @param filename string representing filename (location of file from root of program)
+ * @param num_cities number of cities in the given file
+ * 
+ * @return float** - 2D array that stores distance matrix for given file
+ */
 float** generate_distance_matrix(const char*, int);
+
+/**
+ * @brief generate and return pheremone matrix given a distance matrix and number of cities in distance matrix
+ * 
+ * @param D distance matrix
+ * @param num_cities number of cities in distance matrix
+ * 
+ * @return float** - 2D array that stores pheremone matrix
+ */
 float** generate_pheremone_matrix(float**, int);
+
+/**
+ * @brief generate and return initial ant tabu tables
+ * 
+ * @param num_ants number of ants in the system
+ * @param num_cities number of cities in the optimisation
+ * 
+ * @return int** - 2D array storing ant tabu tables
+ */
 int** generate_ant_tabu_tables(int, int);
+
+/**
+ * @brief reset the ant tabu tables to correct starting values w.r.t start city
+ * 
+ * @param ant_tabu_tables pointer to ant tabu tables
+ * @param num_ants number of ants in the system
+ * @param num_cities number of cities in the optimisation
+ * @param start_city city to start the run from (these are intially set to visited in this function)
+ * 
+ */
 void reset_ant_tabu_tables(int**, int, int, int);
+
+/**
+ * @brief generate and return initial ant routes
+ * 
+ * @param num_ants number of ants in the system
+ * @param num_cities number of cities in the optimisation
+ * 
+ * @return int** - 2D array storing the ant routes
+ */
 int** generate_initial_ant_routes(int, int);
+
+/**
+ * @brief return the number of cities in a given file
+ * 
+ * @param filename file to get number of cities from
+ * 
+ * @return int - number of cities
+ */
 int get_num_cities(const char*);
 
+//
 // NEAREST NEIGHBOUR HEURISTIC
+//
+
+/**
+ * @brief returns the length of a nearest neighbour heuristic tour from a given start city
+ * 
+ * @param D distance matrix
+ * @param num_cities number of cities in distance matrix
+ * @param start_city city to start NN heuristic from
+ * 
+ * @return float - length of NN tour from start_city
+ */
 float nearest_neighbour_tour_length(float**, int, int);
+
+/**
+ * @brief return the next city to visit using NN heuristic logic, i.e. the city with the shortest edge
+ * from the current city.
+ * 
+ * @param D distance matrix
+ * @param visited cities that have already been visited
+ * @param num_cities number of cities in the optimisation
+ * @param curr_city city to find next city from
+ * 
+ * @return int - next city to visit
+ */
 int nearest_neighbour_get_next_city(float**, int*, int, int);
+
+/**
+ * @brief find the shortest nearest neighbour tour by starting the tour from each possible city given
+ * the distance matrix.
+ * 
+ * @param D distance matrix
+ * @param num_cities number of cities in the optimisation
+ * 
+ * @return float - length of shortest NN tour.
+ */
 float shortest_nn_tour(float**, int);
+
+/**
+ * @brief return the tour length of a given tour
+ * 
+ * @param D distance matrix
+ * @param tour tour to find distance of
+ * @param num_cities number of cities in the optimisation
+ * 
+ * @return float - length of given tour
+ */
 float helper_tour_length(float**, int*, int);
 
 // VALIDITY CHECKS
