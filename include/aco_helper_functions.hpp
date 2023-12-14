@@ -56,4 +56,11 @@ int tour_valid(int*, int);
  */
 int copy_shortest(float**, int*, int*, int);
 
+/**
+ * @brief freeing all memory associated with ant_data
+ * 
+ * @param ant_data structure to be freed
+ */
+void clean_up(ANT_DATA* ant_data);
+
 #endif

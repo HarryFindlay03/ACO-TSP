@@ -258,3 +258,40 @@ int copy_shortest(float** D, int* shortest, int* generation_shortest, int num_ci
 
     return 1;
 }
+
+void clean_up(ANT_DATA* ant_data)
+{
+    int num_cities = *(ant_data->num_cities);
+    int num_ants = *(ant_data->num_ants);
+
+    int i;
+
+    // cleanup distance matrix
+    for(i = 0; i < num_cities; i++)
+        delete[] (ant_data->D)[i];
+    delete[] (ant_data->D);
+
+    // cleanup pheremone matrix
+    for(i = 0; i < num_cities; i++)
+        delete[] (ant_data->T)[i];
+    delete[] (ant_data->T);
+
+    // cleanup ant map
+    for(i = 0; i < num_ants; i++)
+        delete[] (ant_data->ant_map)[i];
+    delete[] (ant_data->ant_map);
+
+    // cleanup ant routes
+    for(i = 0; i < num_ants; i++)
+        delete[] (ant_data->ant_routes)[i];
+    delete[] (ant_data->ant_routes);
+
+    // cleanup num_cities, num_ants
+    delete (ant_data->num_cities);
+    delete (ant_data->num_ants);
+
+    // final cleanup ant_data
+    delete ant_data;
+
+    return;
+}

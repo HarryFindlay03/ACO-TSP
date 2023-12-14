@@ -95,6 +95,9 @@ int main()
     std::cout << "FOUND AT ITERATION: " << shortest_route_iteration << std::endl;
 
     std::cout << std::endl;
+
+    // final cleanup
+    clean_up(ant_data);
     return 0;
 }
 
