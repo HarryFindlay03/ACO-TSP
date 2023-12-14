@@ -1,8 +1,5 @@
 #include "../include/aco_functions.hpp"
 
-// TODO
-// Tour length is wrong 
-
 float tour_length(float** D, int* tour, int num_cities)
 {
     float res = 0;
@@ -77,14 +74,14 @@ int get_next_city(ANT_DATA* ant_data, int ant_num, int current_city, float alpha
 {
     int num_cities = *(ant_data->num_cities);
     int i;
-    float probs[num_cities];
+    float* probs = new float[num_cities];
 
     for(i = 0; i < num_cities; i++)
         probs[i] = transition_rule(ant_data, ant_num, current_city, i, alpha, beta);
 
     int pos = 0;
-    int remaining_cities[num_cities]; // only need ever be as big as num_cities
-    float cumulative_probs[num_cities];
+    int* remaining_cities = new int[num_cities]; // only need ever be as big as num_cities
+    float* cumulative_probs = new float[num_cities];
     float res = 0;
     for (i = 0; i < num_cities; i++)
     {
@@ -103,7 +100,13 @@ int get_next_city(ANT_DATA* ant_data, int ant_num, int current_city, float alpha
     while (cumulative_probs[i] < spin)
         i++;
 
-    return remaining_cities[i];
+    int res_return = remaining_cities[i];
+    
+    delete[] probs;
+    delete[] remaining_cities;
+    delete[] cumulative_probs;
+
+    return res_return;
 }
 
 float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, float alpha, float beta)
@@ -150,6 +153,8 @@ void lay_pheremones(ANT_DATA* ant_data, float Q)
             (ant_data->T)[ant_route[j]][ant_route[j+1]] += (Q / route_length);
         (ant_data->T)[ant_route[j]][ant_route[0]] += (Q / route_length); // back to start
     }
+
+    return;
 }
 
 void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
