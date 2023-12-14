@@ -1,5 +1,7 @@
 #include "../include/aco_functions.hpp"
 
+// TODO - rewrite get_next_city function
+
 float tour_length(float** D, int* tour, int num_cities)
 {
     float res = 0;
@@ -196,13 +198,16 @@ float tour_quality_heuristic(float** D, int** ant_routes, int num_ants, int num_
 }
 
 
-void prepare_new_run(ANT_DATA* ant_data, int start_city, float Q, float evaporation_rate)
+void update_pheremones(ANT_DATA* ant_data, int start_city, float Q, float evaporation_rate)
 {
     int num_ants = *(ant_data->num_ants);
     int num_cities = *(ant_data->num_cities);
 
+    // pheremone updates
     lay_pheremones(ant_data, Q);
     evaporate_pheremones(ant_data, evaporation_rate);
+
+    // resetting ant tabu tables for new run
     reset_ant_tabu_tables(ant_data->ant_map, num_ants, num_cities, start_city);
 
     return;

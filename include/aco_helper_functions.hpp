@@ -30,7 +30,7 @@ int get_num_cities(const char*);
 float nearest_neighbour_tour_length(float**, int, int);
 int nearest_neighbour_get_next_city(float**, int*, int, int);
 float shortest_nn_tour(float**, int);
-float nn_tour_length(float**, int*, int);
+float helper_tour_length(float**, int*, int);
 
 // VALIDITY CHECKS
 /**
@@ -41,5 +41,19 @@ float nn_tour_length(float**, int*, int);
  * @return boolean true for if tour is valid false otherwise 
  */
 int tour_valid(int*, int);
+
+// MISC HELP FUNCTIONS
+
+/**
+ * @brief Copy generations shortest route into shortest if generations shortests tour is shorter
+ * 
+ * @param D distance matrix
+ * @param shortest previous shortest route
+ * @param generation_shortest new shortest route to be copied
+ * @param num_cities number of cities:w
+ * 
+ * @return true if generation_shortest is copied into shortest, false otherwise
+ */
+int copy_shortest(float**, int*, int*, int);
 
 #endif

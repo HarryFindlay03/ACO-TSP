@@ -160,7 +160,7 @@ float nearest_neighbour_tour_length(float** D, int num_cities, int start_city)
     delete[] visited;
 
     // get tour length
-    float res = nn_tour_length(D, nn_tour, num_cities);
+    float res = helper_tour_length(D, nn_tour, num_cities);
 
     delete[] nn_tour;
 
@@ -211,7 +211,7 @@ float shortest_nn_tour(float** D, int num_cities)
     return shortest;
 }
 
-float nn_tour_length(float** D, int* tour, int num_cities)
+float helper_tour_length(float** D, int* tour, int num_cities)
 {
     float res = 0;
 
@@ -241,6 +241,20 @@ int tour_valid(int* tour, int num_cities)
         if(count != 1)
             return 0;
     }
+
+    return 1;
+}
+
+// MISC HELP FUNCTIONS
+
+int copy_shortest(float** D, int* shortest, int* generation_shortest, int num_cities)
+{
+    if(!(helper_tour_length(D, generation_shortest, num_cities) < helper_tour_length(D, shortest, num_cities)))
+        return 0;
+
+    int i;
+    for(i = 0; i < num_cities; i++)
+        shortest[i] = generation_shortest[i];
 
     return 1;
 }
