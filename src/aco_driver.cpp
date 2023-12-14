@@ -54,7 +54,7 @@ int main()
 
     std::cout.precision(0);
 
-    for (x = 0; x < total_iterations; x++)
+    for(x = 0; x < total_iterations; x++)
     {
         std::cout << std::fixed << "PROGRESS: " << ((float)x / total_iterations) * 100 << "%\t\r" << std::flush;
 
@@ -72,7 +72,6 @@ int main()
         s = rand() % num_cities;
         update_pheremones(ant_data, s, Q, evaporation_rate);
     }
-
 
     // INFORMATION OUTPUT
     std::cout << std::endl << std::endl;
