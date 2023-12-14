@@ -37,7 +37,11 @@ void run_ant_system(std::string filename, float alpha, float beta, float Q, floa
 
     // INFORMATION OUTPUT
     float shortest_length = tour_length(ant_data->D, shortest, num_cities);
-    std::printf("%0f, %d/%d, SHORTEST TOUR: ", shortest_length, shortest_tour_iteration, iterations);
+
+    std::string valid;
+    (shortest_length == 3323 || shortest_length == 25395) ? valid = "✅" : valid = "❌";
+
+    std::printf("%0f, %d/%d, %s, SHORTEST TOUR: ", shortest_length, shortest_tour_iteration, iterations, valid.c_str());
     
     for(i = 0; i < num_cities; i++)
         std::cout << shortest[i] << " ";
