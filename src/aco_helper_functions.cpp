@@ -53,8 +53,8 @@ float** generate_pheremone_matrix(float** D, int num_cities)
     // ensure prng has been seeded well prior to calling this function
     float** pheremone_matrix = new float*[num_cities];
 
-    // nearest neighbour tour heuristic value
-    float nn_tour_heurisitc = (1 / shortest_nn_tour(D, num_cities));
+    // nearest neighbour tour heuristic value (num_cities / shortest NN tour)
+    float nn_tour_heurisitc = (num_cities / shortest_nn_tour(D, num_cities));
 
     int i, j;
     for(i = 0; i < num_cities; i++)
