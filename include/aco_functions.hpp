@@ -109,7 +109,7 @@ float transition_rule(ANT_DATA*, int, int, int, float, float);
  * @param ant_data pointer to the ant_data_t struct
  * @param Q parameter that determines the amount of pheremone that is layed
  */
-void lay_pheremones(ANT_DATA*, float);
+void deposit_pheremones(ANT_DATA*, float);
 
 /**
  * @brief evaporates pheremones according to evaporation rule and quality heuristic from Dorigo, Stutzle. 2004. Ant Colony Optimization.
@@ -142,3 +142,30 @@ float tour_quality_heuristic(float**, int**, int, int);
  * @param evaporation_rate parameter that determines how much pheremones evaporate
  */
 void update_pheremones(ANT_DATA*, int, float, float);
+
+//
+// ELITIST ANT SYSTEM PHEREMONE FUNCTIONS
+//
+
+/**
+ * @brief deposits pheremones according to elitist pheremone deposit rule from Dorigo, Stutzle. 2004. Ant Colony Optimization.
+ * First deposits pheremones according to classic AS, so not to be used in conjunction with classic deposit_pheremones.
+ * 
+ * @param ant_data pointer to ant_data_t struct
+ * @param shortest array containing the shortest tour found so far
+ * @param e parmater affecting the amount of additional reinforcement added to T^(bs), a good initial value e = num_cities
+ * 
+ */
+void deposit_pheremones_elitist(ANT_DATA*, int*, float);
+
+/**
+ * @brief updates pheremone matrix in ant_data by following same functionality as classic update_pheremones with added
+ * elitist functionality.
+ * 
+ * @param ant_data structure containing all ant data for metaheuristic
+ * @param shortest array containing the shortest tour found so far
+ * @param start_city integer value representing the city that current generation is starting from
+ * @param e parmater affecting the amount of additional reinforcement added to T^(bs), a good initial value e = num_cities
+ * @param evaporation_rate parameter that determines how much pheremones evaporate
+ */
+void update_pheremones_elitist(ANT_DATA*, int*, int, float, float);
