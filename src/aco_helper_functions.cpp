@@ -8,7 +8,7 @@ ANT_DATA* generate_ant_data(const char* filename, int num_ants, int num_cities)
 {
     ANT_DATA* ant_data = new ANT_DATA;
     ant_data->D = generate_distance_matrix(filename, num_cities);
-    ant_data->T = generate_pheremone_matrix(ant_data->D, num_cities);
+    ant_data->T = generate_pheremone_matrix(ant_data->D, num_ants, num_cities);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities);
     ant_data->ant_routes = generate_initial_ant_routes(num_ants, num_cities);
     ant_data->num_ants = new int(num_ants);
@@ -48,13 +48,13 @@ float** generate_distance_matrix(const char* filename, int num_cities)
     return distance_matrix;
 }
 
-float** generate_pheremone_matrix(float** D, int num_cities)
+float** generate_pheremone_matrix(float** D, int num_ants, int num_cities)
 {
     // ensure prng has been seeded well prior to calling this function
     float** pheremone_matrix = new float*[num_cities];
 
     // nearest neighbour tour heuristic value (num_cities / shortest NN tour)
-    float nn_tour_heurisitc = (num_cities / shortest_nn_tour(D, num_cities));
+    float nn_tour_heurisitc = (num_ants / shortest_nn_tour(D, num_cities));
 
     int i, j;
     for(i = 0; i < num_cities; i++)

@@ -154,9 +154,9 @@ void update_pheremones(ANT_DATA*, int, float, float);
  * @param ant_data pointer to ant_data_t struct
  * @param shortest array containing the shortest tour found so far
  * @param e parmater affecting the amount of additional reinforcement added to T^(bs), a good initial value e = num_cities
- * 
+ * @param Q parameter affecting the amount of pheremone to be deposited during lay_pheremone. 
  */
-void deposit_pheremones_elitist(ANT_DATA*, int*, float);
+void deposit_pheremones_elitist(ANT_DATA*, int*, float, float);
 
 /**
  * @brief updates pheremone matrix in ant_data by following same functionality as classic update_pheremones with added
@@ -165,7 +165,8 @@ void deposit_pheremones_elitist(ANT_DATA*, int*, float);
  * @param ant_data structure containing all ant data for metaheuristic
  * @param shortest array containing the shortest tour found so far
  * @param start_city integer value representing the city that current generation is starting from
- * @param e parmater affecting the amount of additional reinforcement added to T^(bs), a good initial value e = num_cities
+ * @param e parameter affecting the amount of additional reinforcement added to T^(bs), a good initial value e = num_cities
+ * @param Q parameter affecting the amount of pheremone to be deposited during lay_pheremone.
  * @param evaporation_rate parameter that determines how much pheremones evaporate
  */
-void update_pheremones_elitist(ANT_DATA*, int*, int, float, float);
+void update_pheremones_elitist(ANT_DATA*, int*, int, float, float, float);

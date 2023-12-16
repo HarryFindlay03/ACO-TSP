@@ -53,7 +53,7 @@ void run_ant_system(std::string filename, float alpha, float beta, float Q, floa
     return;
 }
 
-void run_elitist_ant_system(std::string filename, float alpha, float beta, float evaporation_rate, int num_ants, int num_cities, int iterations)
+void run_elitist_ant_system(std::string filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations)
 {
     ANT_DATA *ant_data = generate_ant_data(filename.c_str(), num_ants, num_cities);
     float e = num_cities;
@@ -86,7 +86,7 @@ void run_elitist_ant_system(std::string filename, float alpha, float beta, float
 
         // setting start_city to random value in range
         s = rand() % num_cities;
-        update_pheremones_elitist(ant_data, shortest, s, e, evaporation_rate);
+        update_pheremones_elitist(ant_data, shortest, s, e, Q, evaporation_rate);
     }
 
     // INFORMATION OUTPUT

@@ -178,10 +178,8 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
 
     int i, j;
 
-    // computing the quality heuristic
-    float quality_heuristic = tour_quality_heuristic(ant_data->D, ant_data->ant_routes, num_ants, num_cities);
-
     float** T = ant_data->T;
+
     // evaporate the pheremones
     for(i = 0; i < num_cities; i++)
     {
@@ -191,25 +189,13 @@ void evaporate_pheremones(ANT_DATA* ant_data, float evaporation_rate)
             if(i == j) continue;
             if(T[i][j] == 0) continue;
 
-            float curr = T[i][j];
-            T[i][j] = ((1 - evaporation_rate) * curr) + quality_heuristic;
+            // float curr = T[i][j];
+            T[i][j] *= (1 - evaporation_rate);
         }
     }
 
     return;
 }
-
-float tour_quality_heuristic(float** D, int** ant_routes, int num_ants, int num_cities)
-{
-    float res = 0;
-
-    int i;
-    for(i = 0; i < num_ants; i++)
-        res += (1 / tour_length(D, ant_routes[i], num_cities));
-
-    return res;
-}
-
 
 void update_pheremones(ANT_DATA* ant_data, int start_city, float Q, float evaporation_rate)
 {
@@ -230,10 +216,10 @@ void update_pheremones(ANT_DATA* ant_data, int start_city, float Q, float evapor
 // ELITIST ANT SYSTEM PHEREMONE FUNCTIONS
 //
 
-void deposit_pheremones_elitist(ANT_DATA* ant_data, int* shortest, float e)
+void deposit_pheremones_elitist(ANT_DATA* ant_data, int* shortest, float e, float Q)
 {
     // deposit pheremones like classic AS
-    deposit_pheremones(ant_data, 1);
+    deposit_pheremones(ant_data, Q);
 
     // extra best-so-far ant deposits extra pheremone on best tour found so far
     int num_cities = *(ant_data->num_cities);
@@ -250,14 +236,14 @@ void deposit_pheremones_elitist(ANT_DATA* ant_data, int* shortest, float e)
     return;
 }
 
-void update_pheremones_elitist(ANT_DATA* ant_data, int* shortest, int start_city, float e, float evaporation_rate)
+void update_pheremones_elitist(ANT_DATA* ant_data, int* shortest, int start_city, float e, float Q, float evaporation_rate)
 {
     int num_ants = *(ant_data->num_ants);
     int num_cities = *(ant_data->num_cities);
 
     // pheremone updates
     evaporate_pheremones(ant_data, evaporation_rate);
-    deposit_pheremones_elitist(ant_data, shortest, e);
+    deposit_pheremones_elitist(ant_data, shortest, e, Q);
 
     // resetting ant tabu tables for new run
     reset_ant_tabu_tables(ant_data->ant_map, num_ants, num_cities, start_city);

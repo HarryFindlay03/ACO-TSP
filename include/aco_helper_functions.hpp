@@ -63,11 +63,12 @@ float** generate_distance_matrix(const char*, int);
  * @brief generate and return pheremone matrix given a distance matrix and number of cities in distance matrix
  * 
  * @param D distance matrix
+ * @param num_ants number of ants in the system
  * @param num_cities number of cities in distance matrix
  * 
  * @return float**
  */
-float** generate_pheremone_matrix(float**, int);
+float** generate_pheremone_matrix(float**, int, int);
 
 /**
  * @brief generate and return initial ant tabu tables
