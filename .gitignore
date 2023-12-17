@@ -5,4 +5,5 @@ pugi_xml_parser
 /build
 /bin
 /ext/*/lib
-/results
+/results/env
+/results/results.txt

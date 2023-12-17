@@ -7,7 +7,7 @@
 int main()
 {
     // seeding random number generator - uncomment below for prod
-    // srand(time(0));
+    srand(time(0));
 
     // INITIAL PARAMETERS
     float alpha = 1; // alpha > 1 leads to stagnation
@@ -28,19 +28,28 @@ int main()
     std::cout << "NUMBER OF CITIES: " << num_cities << std::endl;
     std::cout << "NUMBER OF ANTS: " << num_ants << std::endl << std::endl;
 
+    // OPENING RESULTS FILE
+    std::ofstream results_file;
+    results_file.open("results/results.txt");
+    results_file << "iteration,length,param\n";
+    results_file.close();
+
     // RUN ANT SYSTEM
     int iterations = 1000;
-    int retries = 6;
+    int retries = 10;
     int i;
-    for(i = 0; i < retries; i++)
+    float param;
+    for(param = 0.5; param < 2.5; param += 0.1)
     {
-        std::cout << "RUN " << i << std::endl;
-        run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations);
-        run_elitist_ant_system(filename, alpha, beta, Q, evaporation_rate, e, num_ants, num_cities, iterations);
-        
-        // parameter ouptut
-        std::printf("alpha=%.0f, beta=%.0f, Q=%.0f, evaporation rate=%.1f, e=%.0f\n", alpha, beta, Q, evaporation_rate, e);
-        std::cout << std::endl;
+        alpha = param;
+        for (i = 0; i <= retries; i++)
+        {
+            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations);
+            // run_elitist_ant_system(filename, alpha, beta, Q, evaporation_rate, e, num_ants, num_cities, iterations);
+
+            // parameter ouptut
+            std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f, e=%.0f\n", alpha, beta, Q, evaporation_rate, e);
+        }
     }
 
     return 0;

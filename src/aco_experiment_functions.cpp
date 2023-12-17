@@ -2,6 +2,11 @@
 
 void run_ant_system(std::string filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations)
 {
+    // OPENING FILE
+    std::ofstream results_file;
+    results_file.open("results/results.txt", std::ios::app);
+
+    // GENERATING ANT DATA
     ANT_DATA* ant_data = generate_ant_data(filename.c_str(), num_ants, num_cities);
 
     int shortest_tour_position, shortest_tour_iteration;
@@ -42,16 +47,21 @@ void run_ant_system(std::string filename, float alpha, float beta, float Q, floa
     (shortest_length == 3323 || shortest_length == 25395) ? valid = "✅" : valid = "❌";
 
     std::printf("(classic) %0f, %d/%d, %s, SHORTEST TOUR: ", shortest_length, shortest_tour_iteration, iterations, valid.c_str());
-    
+
     for(i = 0; i < num_cities; i++)
         std::cout << shortest[i] << " ";
     std::cout << shortest[0] << std::endl;
+
 
     if(!tour_valid(shortest, num_cities))
     {
         std::cout << "ERROR! TOUR COMPUTED IS NOT A VALID TOUR!" << std::endl;
         std::exit(-1);
     }
+
+    // FILE WRITING
+    results_file << shortest_tour_iteration << "," << shortest_length << "," << alpha << "\n";
+    results_file.close();
 
     delete[] shortest;
     clean_up(ant_data);
