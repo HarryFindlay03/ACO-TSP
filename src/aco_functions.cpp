@@ -37,9 +37,9 @@ int shortest_tour(float** D, int** ant_routes, int num_ants, int num_cities)
     return shortest;
 }
 
-float city_pair_distance_heuristic(float** D, int x, int y) { return 1 / D[x][y]; }
+float city_pair_distance_heuristic(float** D, int x, int y, float Q) { return Q / D[x][y]; }
 
-void generate_all_ant_routes(ANT_DATA* ant_data, int start_city, float alpha, float beta)
+void generate_all_ant_routes(ANT_DATA* ant_data, int start_city, float alpha, float beta, float Q)
 {
     int i;
     int num_ants = *(ant_data->num_ants);
@@ -50,12 +50,12 @@ void generate_all_ant_routes(ANT_DATA* ant_data, int start_city, float alpha, fl
      
     // for each ant
     for(i = 0; i < num_ants; i++)
-        generate_ant_route(ant_data, i, start_city, alpha, beta);
+        generate_ant_route(ant_data, i, start_city, alpha, beta, Q);
 
     return;
 }
 
-void generate_ant_route(ANT_DATA* ant_data, int ant_num, int start_city, float alpha, float beta)
+void generate_ant_route(ANT_DATA* ant_data, int ant_num, int start_city, float alpha, float beta, float Q)
 {
     int num_ants = *(ant_data->num_ants);
     int num_cities = *(ant_data->num_cities); 
@@ -66,7 +66,7 @@ void generate_ant_route(ANT_DATA* ant_data, int ant_num, int start_city, float a
     int i;
     for(i = 0; i < num_cities-1; i++)
     {
-        int next = get_next_city(ant_data, ant_num, ant_route[i], alpha, beta);
+        int next = get_next_city(ant_data, ant_num, ant_route[i], alpha, beta, Q);
         
         // updating current ant route and ant tabu table
         ant_route[i+1] = next;
@@ -76,14 +76,14 @@ void generate_ant_route(ANT_DATA* ant_data, int ant_num, int start_city, float a
     return;
 }
 
-int get_next_city(ANT_DATA* ant_data, int ant_num, int current_city, float alpha, float beta)
+int get_next_city(ANT_DATA* ant_data, int ant_num, int current_city, float alpha, float beta, float Q)
 {
     int num_cities = *(ant_data->num_cities);
     int i;
     float* probs = new float[num_cities];
 
     for(i = 0; i < num_cities; i++)
-        probs[i] = transition_rule(ant_data, ant_num, current_city, i, alpha, beta);
+        probs[i] = transition_rule(ant_data, ant_num, current_city, i, alpha, beta, Q);
 
     int pos = 0;
     int* remaining_cities = new int[num_cities]; // only need ever be as big as num_cities
@@ -119,7 +119,7 @@ int get_next_city(ANT_DATA* ant_data, int ant_num, int current_city, float alpha
 // TRANSITION RULE
 //
 
-float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, float alpha, float beta)
+float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, float alpha, float beta, float Q)
 {
     int num_cities = *(ant_data->num_cities);
     float** D = ant_data->D;
@@ -132,7 +132,7 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, f
 
     float nom, dom;
 
-    nom = (std::pow(T[city_i][city_j], alpha)) * (std::pow(city_pair_distance_heuristic(D, city_i, city_j), beta));
+    nom = (std::pow(T[city_i][city_j], alpha)) * (std::pow(city_pair_distance_heuristic(D, city_i, city_j, Q), beta));
 
     dom = 0;
     int h;
@@ -141,7 +141,7 @@ float transition_rule(ANT_DATA* ant_data, int ant_num, int city_i, int city_j, f
         // city h is unvisited
         if(!ant_tabu_table[h])
         {
-            dom += (std::pow(T[city_i][h], alpha) * std::pow(city_pair_distance_heuristic(D, city_i, h), beta));
+            dom += (std::pow(T[city_i][h], alpha) * std::pow(city_pair_distance_heuristic(D, city_i, h, Q), beta));
         }
     }
 

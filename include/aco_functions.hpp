@@ -40,10 +40,11 @@ int shortest_tour(float**, int**, int, int);
  * @param D distance matrix
  * @param x city x
  * @param y city y
+ * @param Q parameter that affects the return of the distance heuristic
  * 
  * @return float 
  */
-float city_pair_distance_heuristic(float**, int, int);
+float city_pair_distance_heuristic(float**, int, int, float);
 
 /**
  * @brief generates all ant routes for a generation using transition rules and fills relevant information 
@@ -53,8 +54,9 @@ float city_pair_distance_heuristic(float**, int, int);
  * @param start_city initial start position of ant agents
  * @param alpha parameter that weights importance of pheremone strength
  * @param beta parameter that weights the importance of the distance heuristic
+ * @param Q parameter that affects the return of the distance heuristic
  */
-void generate_all_ant_routes(ANT_DATA*, int, float, float);
+void generate_all_ant_routes(ANT_DATA*, int, float, float, float);
 
 /**
  * @brief generate a single ant route given the ant from a given start city
@@ -64,8 +66,9 @@ void generate_all_ant_routes(ANT_DATA*, int, float, float);
  * @param start_city city to start route from
  * @param alpha parameter that weights importance of pheremone strength
  * @param beta parameter that weights importance of the distance heuristic
+ * @param Q parameter that affects the return of the distance heuristic
  */
-void generate_ant_route(ANT_DATA*, int, int, float, float);
+void generate_ant_route(ANT_DATA*, int, int, float, float, float);
 
 /**
  * @brief returns the next city to visit w.r.t the implemented transition rule
@@ -75,10 +78,11 @@ void generate_ant_route(ANT_DATA*, int, int, float, float);
  * @param current_city city to consider transition rule from
  * @param alpha parameter that weights importance of pheremone strength
  * @param beta parameter that weights importance of the distance heuristic
+ * @param Q parameter that affects the return of the distance heuristic
  * 
  * @return int 
  */
-int get_next_city(ANT_DATA*, int, int, float, float);
+int get_next_city(ANT_DATA*, int, int, float, float, float);
 
 //
 // TRANSITION RULE
@@ -94,10 +98,11 @@ int get_next_city(ANT_DATA*, int, int, float, float);
  * @param city_j city to visit
  * @param alpha parameter that weights the importance of the pheremone strength
  * @param beta parameter that weights the importance of the distance heuristic
+ * @param Q parameter that affects the return of the distance heuristic
  * 
  * @return float 
  */
-float transition_rule(ANT_DATA*, int, int, int, float, float);
+float transition_rule(ANT_DATA*, int, int, int, float, float, float);
 
 //
 // PHEREMONE FUNCTIONS

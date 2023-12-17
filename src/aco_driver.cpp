@@ -16,12 +16,14 @@ int main()
     float evaporation_rate = 0.5;
 
     // ENTER PATH OF FILENAME HERE - FROM ROOT
-    // std::string filename("data/burma14.xml");
-    std::string filename("data/brazil58.xml");
+    std::string filename("data/burma14.xml");
+    // std::string filename("data/brazil58.xml");
     std::cout << std::endl << "FILENAME: " << filename << std::endl << std::endl;
 
     int num_cities = get_num_cities(filename.c_str());
     int num_ants = 60;
+
+    float e = num_cities; // ACO book says this is a good level of reinforcement for Tbs.
 
     std::cout << "NUMBER OF CITIES: " << num_cities << std::endl;
     std::cout << "NUMBER OF ANTS: " << num_ants << std::endl << std::endl;
@@ -34,7 +36,10 @@ int main()
     {
         std::cout << "RUN " << i << std::endl;
         run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations);
-        run_elitist_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations);
+        run_elitist_ant_system(filename, alpha, beta, Q, evaporation_rate, e, num_ants, num_cities, iterations);
+        
+        // parameter ouptut
+        std::printf("alpha=%.0f, beta=%.0f, Q=%.0f, evaporation rate=%.1f, e=%.0f\n", alpha, beta, Q, evaporation_rate, e);
         std::cout << std::endl;
     }
 

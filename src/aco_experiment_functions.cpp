@@ -20,7 +20,7 @@ void run_ant_system(std::string filename, float alpha, float beta, float Q, floa
     {
         std::cout << std::fixed << "PROGRESS: " << ((float)i / iterations) * 100 << "%\t\r" << std::flush;
 
-        generate_all_ant_routes(ant_data, s, alpha, beta);
+        generate_all_ant_routes(ant_data, s, alpha, beta, Q);
 
         // getting generation shortest tour
         shortest_tour_position = shortest_tour(ant_data->D, ant_data->ant_routes, num_ants, num_cities);
@@ -47,16 +47,21 @@ void run_ant_system(std::string filename, float alpha, float beta, float Q, floa
         std::cout << shortest[i] << " ";
     std::cout << shortest[0] << std::endl;
 
+    if(!tour_valid(shortest, num_cities))
+    {
+        std::cout << "ERROR! TOUR COMPUTED IS NOT A VALID TOUR!" << std::endl;
+        std::exit(-1);
+    }
+
     delete[] shortest;
     clean_up(ant_data);
 
     return;
 }
 
-void run_elitist_ant_system(std::string filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations)
+void run_elitist_ant_system(std::string filename, float alpha, float beta, float Q, float evaporation_rate, float e, int num_ants, int num_cities, int iterations)
 {
     ANT_DATA *ant_data = generate_ant_data(filename.c_str(), num_ants, num_cities);
-    float e = num_cities;
 
     int shortest_tour_position, shortest_tour_iteration;
 
@@ -74,7 +79,7 @@ void run_elitist_ant_system(std::string filename, float alpha, float beta, float
     {
         std::cout << std::fixed << "PROGRESS: " << ((float)i / iterations) * 100 << "%\t\r" << std::flush;
 
-        generate_all_ant_routes(ant_data, s, alpha, beta);
+        generate_all_ant_routes(ant_data, s, alpha, beta, Q);
 
         // getting generation shortest tour
         shortest_tour_position = shortest_tour(ant_data->D, ant_data->ant_routes, num_ants, num_cities);
@@ -100,6 +105,12 @@ void run_elitist_ant_system(std::string filename, float alpha, float beta, float
     for (i = 0; i < num_cities; i++)
         std::cout << shortest[i] << " ";
     std::cout << shortest[0] << std::endl;
+
+    if(!tour_valid(shortest, num_cities))
+    {
+        std::cout << "ERROR! TOUR COMPUTED IS NOT A VALID TOUR!" << std::endl;
+        std::exit(-1);
+    }
 
     delete[] shortest;
     clean_up(ant_data);
