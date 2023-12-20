@@ -7,8 +7,6 @@ This repo provides all the provided files to run this implementation of ACO on t
 **Prerequisites**
 - An installation of GCC to be able to make and run the program
 
-This implementation has been developed using gcc version `clang-1400.0.29.202`.
-
 **Building and Running**
 
 This repo provides a Makefile that allows the program to be built and ran using one command.
