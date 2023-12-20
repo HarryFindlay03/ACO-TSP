@@ -28,10 +28,18 @@ int main()
     std::cout << "NUMBER OF CITIES: " << num_cities << std::endl;
     std::cout << "NUMBER OF ANTS: " << num_ants << std::endl << std::endl;
 
+    int iterations = 10000;
+
+    std::string file_extra("Q"); // change this to change results
+    run_with_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra);
+
+    return 0;
+}
+
+void run_with_logging(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, std::string& file_extra)
+{
     // OPENING RESULTS FILE
     std::ofstream results_file;
-
-    std::string file_extra("alpha"); // change this to change results
     std::string file_iden("results/results_");
     file_iden += file_extra + ".txt";
 
@@ -39,23 +47,32 @@ int main()
     results_file << "iteration,length,param\n";
     results_file.close();
 
+    // change loop bounds depending on file
+    float start, end, step;
+    if(file_extra == "alpha") {start = 0.5; end = 1.5; step = 0.1;}
+    else if(file_extra == "beta") {start = 1; end = 11; step = 1;}
+    else if(file_extra == "evap") {start = 0.1; end = 1.1; step = 0.1;}
+    else {start = 1; end = 11; step = 1;} // Q
+
+
     // RUN ANT SYSTEM
-    int iterations = 10000;
-    int retries = 10;
+    int retries = 15;
     int i;
     float param;
-    for(param = 0.5; param < 1.5; param += 0.1)
+    for(param = start; param < end; param += step)
     {
-        alpha = param;
-        for (i = 0; i <= retries; i++)
+        if(file_extra == "alpha") alpha = param;
+        else if(file_extra == "beta") beta = param;
+        else if(file_extra == "evap") evaporation_rate = param;
+        else Q = param;
+
+        for (i = 0; i < retries; i++)
         {
-            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_iden);
+            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra);
             // run_elitist_ant_system(filename, alpha, beta, Q, evaporation_rate, e, num_ants, num_cities, iterations);
 
             // parameter ouptut
-            std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f, e=%.0f\n", alpha, beta, Q, evaporation_rate, e);
+            std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f\n", alpha, beta, Q, evaporation_rate);
         }
-    }
-
-    return 0;
+    } 
 }

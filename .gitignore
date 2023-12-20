@@ -6,5 +6,4 @@ pugi_xml_parser
 /bin
 /ext/*/lib
 /results/env
-/results/results*.txt
 /results/images

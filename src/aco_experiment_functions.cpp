@@ -1,6 +1,6 @@
 #include "../include/aco_experiment_functions.hpp"
 
-void run_ant_system(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, std::string exp_output)
+void run_ant_system(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, std::string file_extra)
 {
     // GENERATING ANT DATA
     ANT_DATA* ant_data = generate_ant_data(filename.c_str(), num_ants, num_cities);
@@ -56,11 +56,18 @@ void run_ant_system(std::string& filename, float alpha, float beta, float Q, flo
     }
 
     // FILE WRITING   
-    if(!(exp_output == "0"))
+    if(!(file_extra == "0"))
     {
+        std::string file_iden = "results/results_" + file_extra + ".txt";
         std::ofstream results_file;
-        results_file.open(exp_output, std::ios::app);
-        float param = alpha; // change this to record different results
+        results_file.open(file_iden, std::ios::app);
+
+        float param;
+        if(file_extra == "alpha") param = alpha;
+        else if(file_extra == "beta") param = beta;
+        else if(file_extra == "evap") param = evaporation_rate;
+        else param = Q;
+
         results_file << shortest_tour_iteration << "," << shortest_length << "," << param << "\n";
         results_file.close();
     }
