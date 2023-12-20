@@ -25,8 +25,9 @@
  * @param num_ants number of ants to be used in the system
  * @param num_cities number of cities from the file
  * @param iterations number of iterations to run the ant route finding for
+ * @param exp_output experiment output file name - if left empty then experiment will not be ran
  */
-void run_ant_system(std::string, float, float, float, float, int, int, int);
+void run_ant_system(std::string&, float, float, float, float, int, int, int, std::string exp_output = "0");
 
 /**
  * @brief run elitist ant system optimisation with given parameters, handles own memory

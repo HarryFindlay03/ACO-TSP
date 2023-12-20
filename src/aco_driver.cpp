@@ -21,7 +21,7 @@ int main()
     std::cout << std::endl << "FILENAME: " << filename << std::endl << std::endl;
 
     int num_cities = get_num_cities(filename.c_str());
-    int num_ants = 60;
+    int num_ants = 14;
 
     float e = num_cities; // ACO book says this is a good level of reinforcement for Tbs.
 
@@ -30,21 +30,26 @@ int main()
 
     // OPENING RESULTS FILE
     std::ofstream results_file;
-    results_file.open("results/results.txt");
+
+    std::string file_extra("alpha"); // change this to change results
+    std::string file_iden("results/results_");
+    file_iden += file_extra + ".txt";
+
+    results_file.open(file_iden);
     results_file << "iteration,length,param\n";
     results_file.close();
 
     // RUN ANT SYSTEM
-    int iterations = 1000;
+    int iterations = 10000;
     int retries = 10;
     int i;
     float param;
-    for(param = 0.5; param < 2.5; param += 0.1)
+    for(param = 0.5; param < 1.5; param += 0.1)
     {
         alpha = param;
         for (i = 0; i <= retries; i++)
         {
-            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations);
+            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_iden);
             // run_elitist_ant_system(filename, alpha, beta, Q, evaporation_rate, e, num_ants, num_cities, iterations);
 
             // parameter ouptut
