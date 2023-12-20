@@ -30,14 +30,27 @@ int main()
 
     int iterations = 10000;
 
-    std::string file_extra("Q"); // change this to change results
-    run_with_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra);
+    // std::string file_extra("Q"); // change this to change results
+    run_with_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations);
 
     return 0;
 }
 
-void run_with_logging(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, std::string& file_extra)
+void run_with_logging(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, std::string file_extra)
 {
+    // RUN ON ALL PARAMETERS if no file_extra given - by calling the function with all the parameters.
+    if(file_extra == "0")
+    {
+        const char* v[] = {"alpha", "beta", "evap", "Q"}; 
+        std::vector<std::string> params(v, v + 4);
+
+        std::vector<std::string>::iterator it;
+        for(it = params.begin(); it != params.end(); ++it)
+            run_with_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, *it);
+
+        return;
+    }
+
     // OPENING RESULTS FILE
     std::ofstream results_file;
     std::string file_iden("results/results_");
@@ -74,5 +87,7 @@ void run_with_logging(std::string& filename, float alpha, float beta, float Q, f
             // parameter ouptut
             std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f\n", alpha, beta, Q, evaporation_rate);
         }
-    } 
+    }
+
+    return; 
 }

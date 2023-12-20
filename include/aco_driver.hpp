@@ -19,4 +19,4 @@
  * @param file_extra parameter to vary
  * 
  */
-void run_with_logging(std::string&, float, float, float, float, int, int, int, std::string&);
+void run_with_logging(std::string&, float, float, float, float, int, int, int, std::string file_extra = "0");
