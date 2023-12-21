@@ -26,10 +26,12 @@
  * @param num_cities number of cities from the file
  * @param iterations number of iterations to run the ant route finding for
  * @param file_extra parameter to vary - if left empty then experiment will not be ran 
- * @param use_heuristic (optional) if false then random number between 0 and 1 set for each pos in pheremone matrix.
+ * @param use_heuristic (optional, default=1) if false then random number between 0 and 1 set for each pos in pheremone matrix.
  * If true, nearest neighbour heuristic is used.
+ * @param iteration_logging (optional, default=0) if false then iteration logging not enabled, if true then iteration logging enabled where it writes to a file with column
+ * names (Retry, LengthOfOptima, IterationAt)
  */
-void run_ant_system(std::string&, float, float, float, float, int, int, int, std::string file_extra = "0", int use_heuristic=1);
+void run_ant_system(std::string&, float, float, float, float, int, int, int, std::string file_extra = "0", int use_heuristic=1, int iteration_logging=0);
 
 /**
  * @brief run elitist ant system optimisation with given parameters, handles own memory
@@ -46,5 +48,12 @@ void run_ant_system(std::string&, float, float, float, float, int, int, int, std
  * @param num_ants number of ants to be used in the system
  * @param num_cities number of cities from the file
  * @param iterations number of iterations to run the ant route finding for
+ * @param file_extra parameter to vary - if left empty then experiment will not be ran 
+ * @param use_heuristic (optional, default=1) if false then random number between 0 and 1 set for each pos in pheremone matrix.
+ * If true, nearest neighbour heuristic is used.
+ * @param iteration_logging (optional, default=0) if false then iteration logging not enabled, if true then iteration logging enabled where it writes to a file with column
+ * names (Retry, LengthOfOptima, IterationAt) 
  */
 void run_elitist_ant_system(std::string, float, float, float, float, float, int, int, int);
+
+void run_ant_system_elitist(std::string&, float, float, float, float, float, int, int, int, std::string file_extra = "0", int use_heuristic=1, int iteration_logging=0);
