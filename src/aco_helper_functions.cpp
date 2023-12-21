@@ -4,11 +4,11 @@
 // ANT SYSTEM SETUP FUNCTIONS
 //
 
-ANT_DATA* generate_ant_data(const char* filename, int num_ants, int num_cities)
+ANT_DATA* generate_ant_data(const char* filename, int num_ants, int num_cities, int use_heuristic)
 {
     ANT_DATA* ant_data = new ANT_DATA;
     ant_data->D = generate_distance_matrix(filename, num_cities);
-    ant_data->T = generate_pheremone_matrix(ant_data->D, num_ants, num_cities);
+    ant_data->T = generate_pheremone_matrix(ant_data->D, num_ants, num_cities, use_heuristic);
     ant_data->ant_map = generate_ant_tabu_tables(num_ants, num_cities);
     ant_data->ant_routes = generate_initial_ant_routes(num_ants, num_cities);
     ant_data->num_ants = new int(num_ants);
@@ -48,7 +48,7 @@ float** generate_distance_matrix(const char* filename, int num_cities)
     return distance_matrix;
 }
 
-float** generate_pheremone_matrix(float** D, int num_ants, int num_cities)
+float** generate_pheremone_matrix(float** D, int num_ants, int num_cities, int use_heuristic)
 {
     // ensure prng has been seeded well prior to calling this function
     float** pheremone_matrix = new float*[num_cities];
@@ -70,7 +70,10 @@ float** generate_pheremone_matrix(float** D, int num_ants, int num_cities)
 
             // USING NEAREST NEIGHBOUR HEURISTIC TO SET INITIAL PHEREMONE LEVEL
             // DORIGO, SUTZE, Ant Colonty Optimization
-            pheremone_matrix[i][j] = nn_tour_heurisitc;
+            if(use_heuristic) 
+                pheremone_matrix[i][j] = nn_tour_heurisitc;
+            else
+                pheremone_matrix[i][j] = (float)rand() / (float)RAND_MAX; // init between 0 and 1
         }
     }
 

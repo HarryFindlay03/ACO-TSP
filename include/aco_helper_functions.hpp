@@ -44,10 +44,12 @@ typedef struct ant_data_t {
  * @param filename string representing filename (location of file from root of program execution)
  * @param num_ants number of ants in the system
  * @param num_cities number of cities in the optimisation
+ * @param use_heuristic (optional) if false then random number between 0 and 1 set for each pos in pheremone matrix.
+ * If true, nearest neighbour heuristic is used.
  * 
  * @return ANT_DATA*
  */
-ANT_DATA* generate_ant_data(const char*, int, int);
+ANT_DATA* generate_ant_data(const char*, int, int, int use_heuristic=1);
 
 /**
  * @brief generate and returns distance matrix given filename and number of cities in the given input file
@@ -65,10 +67,12 @@ float** generate_distance_matrix(const char*, int);
  * @param D distance matrix
  * @param num_ants number of ants in the system
  * @param num_cities number of cities in distance matrix
+ * @param use_heuristic (optional) if false then random number between 0 and 1 set for each pos in pheremone matrix.
+ * If true, nearest neighbour heuristic is used.
  * 
  * @return float**
  */
-float** generate_pheremone_matrix(float**, int, int);
+float** generate_pheremone_matrix(float**, int, int, int use_heuristic=1);
 
 /**
  * @brief generate and return initial ant tabu tables

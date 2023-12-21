@@ -37,7 +37,7 @@ int shortest_tour(float** D, int** ant_routes, int num_ants, int num_cities)
     return shortest;
 }
 
-float city_pair_distance_heuristic(float** D, int x, int y, float Q) { return Q / D[x][y]; }
+float city_pair_distance_heuristic(float** D, int x, int y, float Q) { return 1 / D[x][y]; }
 
 void generate_all_ant_routes(ANT_DATA* ant_data, int start_city, float alpha, float beta, float Q)
 {

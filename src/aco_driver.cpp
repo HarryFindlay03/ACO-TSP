@@ -31,7 +31,7 @@ int main()
     int iterations = 10000;
 
     // std::string file_extra("Q"); // change this to change results
-    run_with_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations);
+    run_with_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, "Q");
 
     return 0;
 }
@@ -81,9 +81,7 @@ void run_with_logging(std::string& filename, float alpha, float beta, float Q, f
 
         for (i = 0; i < retries; i++)
         {
-            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra);
-            // run_elitist_ant_system(filename, alpha, beta, Q, evaporation_rate, e, num_ants, num_cities, iterations);
-
+            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra, 0);
             // parameter ouptut
             std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f\n", alpha, beta, Q, evaporation_rate);
         }
