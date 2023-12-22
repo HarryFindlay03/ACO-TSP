@@ -127,21 +127,11 @@ int get_num_cities(const char* filename)
 {
     pugi::xml_document doc;
 
-    // need error handling here
-    int errNo = 0;
-    std::string new_filename = filename;
-    while(!doc.load_file(new_filename.c_str()))
+    // ERROR HANDLING MUST BE DONE BEFORE THIS
+    if(!doc.load_file(filename))
     {
-        if(errNo++ == 5)
-        {
-            std::cout << "YOU HAVE ENTERED TOO MANY WRONG FILENAMES!" << std::endl;
-            std::cout << "EXITING!" << std::endl;
-            std::exit(-1);
-        }
-
-        std::cout << "THAT IS NOT A VALID FILENAME!" << std::endl;
-        std::cout << "PLEASE TRY AGAIN, ENTER ONE HERE (from program root): ";
-        std::cin >> new_filename;
+        std::cout << "ERROR - FILENAME NOT VALID!" << std::endl;
+        std::exit(-1);
     }
 
     pugi::xml_node nodes = doc.child("travellingSalesmanProblemInstance").child("graph");
@@ -350,7 +340,7 @@ int get_params(std::string& filename, float* params)
     {
         while(getline(param_file, line))
         {
-            if(line_num >= 8)
+            if(line_num >= 9)
             {
                 std::cout << "PARAM FILE NOT FORMATTED CORRECTLY!" << std::endl;
                 std::cout << "USING DEFAULT VALUES FOR NOW, TO USE PARAM FILE IN THE FUTURE PLEASE";
@@ -365,7 +355,7 @@ int get_params(std::string& filename, float* params)
         }
     }
 
-    if (line_num != 8)
+    if (line_num != 9)
     {
         std::cout << "PARAM FILE NOT FORMATTED CORRECTLY!" << std::endl;
         std::cout << "USING DEFAULT VALUES FOR NOW, TO USE PARAM FILE IN THE FUTURE PLEASE";

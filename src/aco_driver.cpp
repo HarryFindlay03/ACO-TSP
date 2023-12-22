@@ -42,14 +42,15 @@ int main(int argc, char* argv[])
     float Q = 1; // ACO BOOK SAYS Q = 1
     float evaporation_rate = 0.5;
     int num_ants;
-    int iterations = 1000;
+    int iterations = 10000;
     int use_heuristic = 1;
     int approach_type = 0;
+    int retries = 1;
 
     // read the param_filename if it has been provided
     if(params_provided)
     {
-        float* params = new float[8];
+        float* params = new float[9];
         if(get_params(param_filename, params))
         {
             num_ants = (int)params[0];
@@ -60,12 +61,10 @@ int main(int argc, char* argv[])
             iterations = (int)params[5];
             use_heuristic = (int)params[6];
             approach_type = (int)params[7];
-            std::cout << "USING PARAMETERS FROM: " << param_filename << std::endl;
-        } else { std::cout << "USING DEFAULT PARAMETERS!" << std::endl; }
-
+            retries = (int)params[8];
+        }
         delete[] params;
     }
-    else { std::cout << "USING DEFAULT PARAMETERS!" << std::endl; }
 
     // seeding random number generator - uncomment below for prod
     srand(time(0));
@@ -80,6 +79,7 @@ int main(int argc, char* argv[])
         num_ants = num_cities;
     float e = num_cities; // ACO book says this is a good level of reinforcement for Tbs.
 
+    std::cout << "PARAMETERS" << std::endl;
     std::cout << "NUMBER OF CITIES: " << num_cities << std::endl;
     std::cout << "NUMBER OF ANTS: " << num_ants << std::endl;
     std::cout << "ALPHA: " << alpha << std::endl;
@@ -90,109 +90,32 @@ int main(int argc, char* argv[])
     std::string h;
     use_heuristic ? h = "TRUE" : h = "FALSE";
     std::cout << "USE T0 HEURISTIC: " << h << std::endl;
+    approach_type ? h = "ELITIST" : h = "CLASSIC";
+    std::cout << "APPROACH: " << h << std::endl;
+    std::cout << "RUNS: " << retries << std::endl;
+
     std::cout << std::endl;
 
     // RUNNING THE ANT SYSTEM
-    if(approach_type == 0)
+    int i;
+    for(i = 0; i < retries; i++)
     {
-        run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, "0", use_heuristic, 0);
-    }
-    else
-    {
-        run_ant_system_elitist(filename, alpha, beta, Q, evaporation_rate, e, num_ants, num_cities, iterations, "0", use_heuristic, 0);
+        std::cout << "RUN " << (i+1) << std::endl;
+        if (approach_type == 0)
+        {
+            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, "0", use_heuristic, 0);
+        }
+        else
+        {
+            run_ant_system_elitist(filename, alpha, beta, Q, evaporation_rate, e, num_ants, num_cities, iterations, "0", use_heuristic, 0);
+        }
+        std::cout << "\n\n";
     }
 
-
+    // LOGGING FUNCTIONALITY
     // std::string file_extra("numants"); // change this to change results
     // run_with_param_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra);
     // run_with_per_iteration_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, 1, file_extra);
 
     return 0;
-}
-
-void run_with_param_logging(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, std::string file_extra)
-{
-    // RUN ON ALL PARAMETERS if no file_extra given - by calling the function with all the parameters.
-    if(file_extra == "0")
-    {
-        const char* v[] = {"alpha", "beta", "evap", "Q"}; 
-        std::vector<std::string> params(v, v + 4);
-
-        std::vector<std::string>::iterator it;
-        for(it = params.begin(); it != params.end(); ++it)
-            run_with_param_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, *it);
-
-        return;
-    }
-
-    // OPENING RESULTS FILE
-    std::ofstream results_file;
-    std::string file_iden("results/results_");
-    file_iden += file_extra + ".txt";
-
-    results_file.open(file_iden);
-    results_file << "iteration,length,param\n";
-    results_file.close();
-
-    // change loop bounds depending on file
-    float start, end, step;
-    if(file_extra == "alpha") {start = 0.5; end = 1.5; step = 0.1;}
-    else if(file_extra == "beta") {start = 1; end = 11; step = 1;}
-    else if(file_extra == "evap") {start = 0.1; end = 1.1; step = 0.1;}
-    else if(file_extra == "Q") {start = 1; end = 11; step = 1;}
-    else if(file_extra == "numants") {start = 101; end = 152; step = 10;}
-    else {start = 0; end = 1; step = 1;} //run it once
-
-
-    // RUN ANT SYSTEM
-    int retries = 3;
-    int i;
-    float param;
-    for(param = start; param < end; param += step)
-    {
-        if(file_extra == "alpha") alpha = param;
-        else if(file_extra == "beta") beta = param;
-        else if(file_extra == "evap") evaporation_rate = param;
-        else if(file_extra == "Q") Q = param;
-        else if(file_extra == "numants") num_ants = param;
-
-        for (i = 0; i < retries; i++)
-        {
-            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra, 0, 0);
-            // run_ant_system_elitist(filename, alpha, beta, Q, evaporation_rate, num_cities, num_ants, num_cities, iterations, file_extra);
-            // parameter ouptut
-            std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f, num_ants=%d\n", alpha, beta, Q, evaporation_rate, num_ants);
-        }
-    }
-
-    return; 
-}
-
-void run_with_per_iteration_logging(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, int approach_type, std::string output_ext)
-{
-    // OPENING RESULTS FILE
-    std::ofstream results_file;
-    std::string file_iden("results/results_");
-    file_iden += output_ext + ".txt";
-
-    results_file.open(file_iden);
-    results_file << "lengthOptimaSoFar,iteration\n";
-    results_file.close();
-
-    // RUN ANT SYSTEM
-    int retries = 5;
-    int i;
-    float param;
-    for (i = 0; i < retries; i++)
-    {
-        if(approach_type == 1)
-            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, output_ext, 0, 1);
-        else
-            run_ant_system_elitist(filename, alpha, beta, Q, evaporation_rate, num_cities, num_ants, num_cities, iterations, output_ext, 1, 1);
-
-        // parameter ouptut
-        std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f\n", alpha, beta, Q, evaporation_rate);
-    }
-
-    return;
 }

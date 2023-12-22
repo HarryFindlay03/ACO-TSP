@@ -107,7 +107,7 @@ void reset_ant_tabu_tables(int**, int, int, int);
 int** generate_initial_ant_routes(int, int);
 
 /**
- * @brief return the number of cities in a given file
+ * @brief return the number of cities in a given file. Note - error handling for filename must have been done before this function call
  * 
  * @param filename file to get number of cities from
  * 
