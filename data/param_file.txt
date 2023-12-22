@@ -1,0 +1,8 @@
+num_ants=20
+alpha=1
+beta=3
+Q=1
+evaporation_rate=0.3
+iterations=10000
+T0_heuristic=1
+approach=0

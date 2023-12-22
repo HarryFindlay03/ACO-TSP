@@ -8,6 +8,7 @@
 #include <map>
 #include <cstdlib>
 #include <vector>
+#include <fstream>
 
 #include "../ext/pugixml/pugixml.hpp"
 
@@ -187,6 +188,44 @@ int tour_valid(int*, int);
  * @return int (boolean)
  */
 int copy_shortest(float**, int*, int*, int);
+
+/**
+ * @brief checks whether a filename is valid for TSP instance xml file, if not will ask for a new filename, and return it once a valid one has been
+ * entered, else after 5 retries it will exit the program.
+ * 
+ * @param filename input filename that is being checked
+ * @return int (boolean) 
+ */
+int is_valid_xml_filename(std::string&);
+
+/**
+ * @brief checks whether a filename is valid for parameter file, if not will ask for a new filename, and return it once a valid one has been
+ * entered, else after 5 retries it will return false so default parameters should be used
+ * 
+ * @param filename input filename that is being checked
+ * @return int (boolean)
+ */
+int is_valid_param_filename(std::string&);
+
+/**
+ * @brief checks that an entered file is a text file
+ * 
+ * @param filename filename string to check
+ * 
+ * @return int (boolean) 
+ */
+int is_txt_file(std::string&);
+
+/**
+ * @brief Get the parameters from formatted parameter file that can be found by default in data/param_file.txt, although to use one must specify the location
+ * of the parameter file in the input arguments otherwise default parameters will be used. Returns true or false whether param file was formatted correctly.
+ * 
+ * @param filename location of parameter file
+ * @param params array of params to fill with values from file
+ * 
+ * @return int (boolean) 
+ */
+int get_params(std::string&, float*);
 
 /**
  * @brief freeing all memory associated with ant_data

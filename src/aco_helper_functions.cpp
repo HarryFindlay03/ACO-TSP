@@ -128,8 +128,21 @@ int get_num_cities(const char* filename)
     pugi::xml_document doc;
 
     // need error handling here
-    if(!doc.load_file(filename))
-        std::cout << "There was an error!" << std::endl;
+    int errNo = 0;
+    std::string new_filename = filename;
+    while(!doc.load_file(new_filename.c_str()))
+    {
+        if(errNo++ == 5)
+        {
+            std::cout << "YOU HAVE ENTERED TOO MANY WRONG FILENAMES!" << std::endl;
+            std::cout << "EXITING!" << std::endl;
+            std::exit(-1);
+        }
+
+        std::cout << "THAT IS NOT A VALID FILENAME!" << std::endl;
+        std::cout << "PLEASE TRY AGAIN, ENTER ONE HERE (from program root): ";
+        std::cin >> new_filename;
+    }
 
     pugi::xml_node nodes = doc.child("travellingSalesmanProblemInstance").child("graph");
 
@@ -265,6 +278,102 @@ int copy_shortest(float** D, int* shortest, int* generation_shortest, int num_ci
     for(i = 0; i < num_cities; i++)
         shortest[i] = generation_shortest[i];
 
+    return 1;
+}
+
+int is_valid_xml_filename(std::string& filename)
+{
+    // filename error handling
+    int errNo = 0;
+    pugi::xml_document doc;
+    while(!doc.load_file(filename.c_str()))
+    {
+        if(errNo++ >= 5)
+        {
+            std::cout << "YOU HAVE ENTERED TOO MANY WRONG FILENAMES\nEXITING" << std::endl;
+            std::exit(-1);
+        }
+        std::cout << "THAT IS NOT A VALID TSP INSTANCE XML FILENAME! (" << errNo << "/" << 5 << ")" << std::endl;
+        std::cout << "PLEASE TRY AGAIN, ENTER ONE HERE (from program root): ";
+        std::cin >> filename;
+    }
+
+    return 1;
+}
+
+int is_valid_param_filename(std::string& filename)
+{
+    // filename error handling
+    int errNo = 0;
+    std::ifstream param_file(filename);
+    while(!(is_txt_file(filename)) || !(param_file.is_open()))
+    {
+        if(errNo++ >= 5)
+        {
+            std::cout << "YOU HAVE ENTERED TOO MANY WRONG FILENAMES\nEXITING" << std::endl;
+            return 0; 
+        }
+        std::cout << "THAT IS NOT A VALID PARAMETER FILENAME! (" << errNo << "/" << 5 << ")" << std::endl;
+        std::cout << "PLEASE TRY AGAIN, ENTER ONE HERE (from program root): ";
+        std::cin >> filename;
+
+        param_file.open(filename);
+    }
+
+    param_file.close();
+    return 1; 
+}
+
+int is_txt_file(std::string& filename)
+{
+    int i, pos;
+    for(i = 0; i < filename.length(); i++)
+    {
+        if(filename[i] == '.')
+        {
+            if(filename.substr(i+1, 3) == "txt")
+                return 1;
+            return 0;
+        }
+    }
+
+    return 0;
+}
+
+int get_params(std::string& filename, float* params)
+{
+    std::string line;
+    std::ifstream param_file(filename);
+
+    int line_num = 0;
+    if(param_file.is_open())
+    {
+        while(getline(param_file, line))
+        {
+            if(line_num >= 8)
+            {
+                std::cout << "PARAM FILE NOT FORMATTED CORRECTLY!" << std::endl;
+                std::cout << "USING DEFAULT VALUES FOR NOW, TO USE PARAM FILE IN THE FUTURE PLEASE";
+                std::cout << " CHECK THE README AND REFORMAT CORRECTLY!" << std::endl;
+                return 0;
+            }
+
+            std::string delim = "=";
+            line.erase(0, line.find(delim) + delim.length());
+            params[line_num] = std::stof(line);
+            line_num++;
+        }
+    }
+
+    if (line_num != 8)
+    {
+        std::cout << "PARAM FILE NOT FORMATTED CORRECTLY!" << std::endl;
+        std::cout << "USING DEFAULT VALUES FOR NOW, TO USE PARAM FILE IN THE FUTURE PLEASE";
+        std::cout << " CHECK THE README AND REFORMAT CORRECTLY!" << std::endl;
+        return 0;
+    }
+
+    param_file.close();
     return 1;
 }
 
