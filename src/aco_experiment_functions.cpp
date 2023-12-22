@@ -151,7 +151,7 @@ void run_ant_system_elitist(std::string& filename, float alpha, float beta, floa
     std::string valid;
     (shortest_length == 3323 || shortest_length == 25395) ? valid = "✅" : valid = "❌";
 
-    std::printf("(classic) %0f, %d/%d, %s, SHORTEST TOUR: ", shortest_length, shortest_tour_iteration, iterations, valid.c_str());
+    std::printf("(elitist) %0f, %d/%d, %s, SHORTEST TOUR: ", shortest_length, shortest_tour_iteration, iterations, valid.c_str());
 
     for(i = 0; i < num_cities; i++)
         std::cout << shortest[i] << " ";

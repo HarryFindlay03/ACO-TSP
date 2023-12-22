@@ -54,6 +54,4 @@ void run_ant_system(std::string&, float, float, float, float, int, int, int, std
  * @param iteration_logging (optional, default=0) if false then iteration logging not enabled, if true then iteration logging enabled where it writes to a file with column
  * names (Retry, LengthOfOptima, IterationAt) 
  */
-void run_elitist_ant_system(std::string, float, float, float, float, float, int, int, int);
-
 void run_ant_system_elitist(std::string&, float, float, float, float, float, int, int, int, std::string file_extra = "0", int use_heuristic=1, int iteration_logging=0);

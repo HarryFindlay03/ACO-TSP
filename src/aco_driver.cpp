@@ -16,12 +16,12 @@ int main()
     float evaporation_rate = 0.5;
 
     // ENTER PATH OF FILENAME HERE - FROM ROOT
-    // std::string filename("data/burma14.xml");
-    std::string filename("data/brazil58.xml");
+    std::string filename("data/burma14.xml");
+    // std::string filename("data/brazil58.xml");
     std::cout << std::endl << "FILENAME: " << filename << std::endl << std::endl;
 
     int num_cities = get_num_cities(filename.c_str());
-    int num_ants = 14;
+    int num_ants = 70;
 
     float e = num_cities; // ACO book says this is a good level of reinforcement for Tbs.
 
@@ -30,14 +30,14 @@ int main()
 
     int iterations = 1000;
 
-    std::string file_extra("numants_brazil"); // change this to change results
-    run_with_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra);
-    // run_with_per_iteration_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, 1);
+    std::string file_extra("numants"); // change this to change results
+    run_with_param_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra);
+    // run_with_per_iteration_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, 1, file_extra);
 
     return 0;
 }
 
-void run_with_logging(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, std::string file_extra)
+void run_with_param_logging(std::string& filename, float alpha, float beta, float Q, float evaporation_rate, int num_ants, int num_cities, int iterations, std::string file_extra)
 {
     // RUN ON ALL PARAMETERS if no file_extra given - by calling the function with all the parameters.
     if(file_extra == "0")
@@ -47,7 +47,7 @@ void run_with_logging(std::string& filename, float alpha, float beta, float Q, f
 
         std::vector<std::string>::iterator it;
         for(it = params.begin(); it != params.end(); ++it)
-            run_with_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, *it);
+            run_with_param_logging(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, *it);
 
         return;
     }
@@ -67,7 +67,8 @@ void run_with_logging(std::string& filename, float alpha, float beta, float Q, f
     else if(file_extra == "beta") {start = 1; end = 11; step = 1;}
     else if(file_extra == "evap") {start = 0.1; end = 1.1; step = 0.1;}
     else if(file_extra == "Q") {start = 1; end = 11; step = 1;}
-    else {start = 1; end = 102; step = 10;}
+    else if(file_extra == "numants") {start = 101; end = 152; step = 10;}
+    else {start = 0; end = 1; step = 1;} //run it once
 
 
     // RUN ANT SYSTEM
@@ -80,11 +81,12 @@ void run_with_logging(std::string& filename, float alpha, float beta, float Q, f
         else if(file_extra == "beta") beta = param;
         else if(file_extra == "evap") evaporation_rate = param;
         else if(file_extra == "Q") Q = param;
-        else num_ants = param;
+        else if(file_extra == "numants") num_ants = param;
 
         for (i = 0; i < retries; i++)
         {
-            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra, 0);
+            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, file_extra, 0, 0);
+            // run_ant_system_elitist(filename, alpha, beta, Q, evaporation_rate, num_cities, num_ants, num_cities, iterations, file_extra);
             // parameter ouptut
             std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f, num_ants=%d\n", alpha, beta, Q, evaporation_rate, num_ants);
         }
@@ -105,13 +107,16 @@ void run_with_per_iteration_logging(std::string& filename, float alpha, float be
     results_file.close();
 
     // RUN ANT SYSTEM
-    int retries = 15;
+    int retries = 5;
     int i;
     float param;
     for (i = 0; i < retries; i++)
     {
-        run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, output_ext, 0, 1);
-        // run_ant_system_elitist(filename, alpha, beta, Q, evaporation_rate, num_cities, num_ants, num_cities, iterations, output_ext, 1, 1);
+        if(approach_type == 1)
+            run_ant_system(filename, alpha, beta, Q, evaporation_rate, num_ants, num_cities, iterations, output_ext, 0, 1);
+        else
+            run_ant_system_elitist(filename, alpha, beta, Q, evaporation_rate, num_cities, num_ants, num_cities, iterations, output_ext, 1, 1);
+
         // parameter ouptut
         std::printf("alpha=%.1f, beta=%.0f, Q=%.0f, evaporation rate=%.1f\n", alpha, beta, Q, evaporation_rate);
     }
